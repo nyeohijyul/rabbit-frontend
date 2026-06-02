@@ -8,6 +8,7 @@
  * 
  */
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function TimerChart({ started_at, timerLength }) {
   const endAt =
@@ -36,19 +37,19 @@ function TimerChart({ started_at, timerLength }) {
   return (
     <>
     <p>남은 시간: {Math.floor(remaining / 60)}분 {remaining % 60}초</p>
-    <div style={{ width: "500px", height: "30px", padding: "5px", boxSizing: "border-box" }}>
+    <div style={{ width: "100%", height: "30px", padding: "5px", boxSizing: "border-box" }}>
       <div style={{ width: `${(remaining / (timerLength * 60)) * 100}%`, height: "100%", backgroundColor: "green" }} />
     </div>
     </>
   );
 }
 
-function Timer({ timer_id, started_at, contentType, timerLength }) {
-  
+function Timer({ timer_id, started_at=Date.now(), contentType, timerLength=10 }) {
+  const navigate = useNavigate();
   return (
     <>
     {/* Home 으로 이동 */}
-    <button>종료하기</button>
+    <button onClick={() => navigate("/home")}>종료하기</button>
 
     <p>콘텐츠 유형: {contentType}</p>
     <TimerChart started_at={started_at} timerLength={timerLength} />
