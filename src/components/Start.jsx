@@ -33,11 +33,7 @@ const backendAPI = {
   }
 }
 
-const contentTypes = ["릴스", "쇼츠", "웹툰", "게임"];
-const [selectedContentType, setSelectedContentType] = useState(null);
-const [timerlength, setTimerLength] = useState(20);
-
-function ContentTypeOption({ contentType }) {
+function ContentTypeOption({ contentType, setSelectedContentType }) {
   return (
     <label>
       <input type="radio" name="contentType" value={contentType} onChange={ () => setSelectedContentType(contentType) } />
@@ -46,12 +42,12 @@ function ContentTypeOption({ contentType }) {
   )
 }
 
-function ContentTypeSelection() {
+function ContentTypeSelection({ setSelectedContentType }) {
   const [userInput, setUserInput] = useState("");
   return (
     <>
     {contentTypes.map((contentType) => (
-      <ContentTypeOption key={contentType} contentType={contentType} />
+      <ContentTypeOption key={contentType} contentType={contentType} setSelectedContentType={setSelectedContentType} />
     ))}
     <label>
       <input type="radio" name="contentType" value={userInput} onChange={ () => setSelectedContentType(userInput) } />
@@ -60,21 +56,21 @@ function ContentTypeSelection() {
     </>
   )
 }
-function TimerSetterButton({ minute }) {
+function TimerSetterButton({ minute, setTimerLength }) {
   return (
     <button onClick={ () => setTimerLength(minute) }>
       {minute}분
     </button>
   )
 }
-function TimerChangeButton({ minutechange }) {
+function TimerChangeButton({ minutechange, setTimerLength, timerlength }) {
   return (
     <button onClick={ () => (timerlength + minutechange >= 3) && (timerlength + minutechange <= 120) && setTimerLength(timerlength + minutechange) }>
       {minutechange > 0 ? `+${minutechange}분` : `${minutechange}분`}
     </button>
   )
 }
-function TimerInput() {
+function TimerInput({ timerlength, setTimerLength }) {
   return (
     <label>
       타이머 시간: <input type="number" value={timerlength} min="3" max="120" step="1" onChange={ (e) => setTimerLength(Number(e.target.value)) } />
@@ -83,6 +79,10 @@ function TimerInput() {
 }
 
 function Start() {
+  const contentTypes = ["릴스", "쇼츠", "웹툰", "게임"];
+  const [selectedContentType, setSelectedContentType] = useState(null);
+  const [timerlength, setTimerLength] = useState(20);
+
   return (
     <>
     {/* Home 으로 이동 */}
@@ -90,16 +90,16 @@ function Start() {
     
     <h2>타이머 설정</h2>
     <h4>콘텐츠 유형 선택</h4>
-    <ContentTypeSelection />
+    <ContentTypeSelection setSelectedContentType={setSelectedContentType} />
     <h4>시간 설정</h4>
     <span>{timerlength}분</span>
-    <TimerInput />
-    <TimerSetterButton minute={20} />
-    <TimerSetterButton minute={30} />
-    <TimerSetterButton minute={40} />
-    <TimerChangeButton minutechange={1} />
-    <TimerChangeButton minutechange={-1} />
-    <TimerChangeButton minutechange={5} />
+    <TimerInput timerlength={timerlength} setTimerLength={setTimerLength} />
+    <TimerSetterButton minute={20} setTimerLength={setTimerLength} />
+    <TimerSetterButton minute={30} setTimerLength={setTimerLength} />
+    <TimerSetterButton minute={40} setTimerLength={setTimerLength} />
+    <TimerChangeButton minutechange={1} setTimerLength={setTimerLength} timerlength={timerlength} />
+    <TimerChangeButton minutechange={-1} setTimerLength={setTimerLength} timerlength={timerlength} />
+    <TimerChangeButton minutechange={5} setTimerLength={setTimerLength} timerlength={timerlength} />
     <button onClick={() => backendAPI.postTimerStart(selectedContentType, timerlength)}>시작하기</button>
     {/* Timer 로 이동 */}
     {/* context 이용해서 종료시각 계산하기? */}

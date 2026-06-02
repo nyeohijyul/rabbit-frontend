@@ -21,21 +21,26 @@ function TimerChart({ started_at, timerLength }) {
       setRemaining(
         Math.max(0, Math.floor((endAt - Date.now()) / 1000))
       );
+      if (Math.max(0, Math.floor((endAt - Date.now()) / 1000)) === 0) {
+        clearInterval(interval);
+      }
     };
 
     update();
 
     const interval = setInterval(update, 1000);
     
-    if (Math.max(0, Math.floor((endAt - Date.now()) / 1000)) === 0) {
-      clearInterval(interval);
-    }
     return () => clearInterval(interval);
   }, [endAt]);
 
-  return <div style={{ width: "500px", height: "30px", padding: "5px", boxSizing: "border-box" }}>
+  return (
+    <>
+    <p>남은 시간: {Math.floor(remaining / 60)}분 {remaining % 60}초</p>
+    <div style={{ width: "500px", height: "30px", padding: "5px", boxSizing: "border-box" }}>
       <div style={{ width: `${(remaining / (timerLength * 60)) * 100}%`, height: "100%", backgroundColor: "green" }} />
-    </div>;
+    </div>
+    </>
+  );
 }
 
 function Timer({ timer_id, started_at, contentType, timerLength }) {
@@ -46,7 +51,6 @@ function Timer({ timer_id, started_at, contentType, timerLength }) {
     <button>종료하기</button>
 
     <p>콘텐츠 유형: {contentType}</p>
-    <p>남은 시간: {timerLength}분</p>
     <TimerChart started_at={started_at} timerLength={timerLength} />
     </>
   )

@@ -32,8 +32,6 @@ const missions = [
   { title: "랜덤 계산 문제", description: "설명" },
   { title: "랜덤 구구단 문제", description: "설명" }
 ];
-const [selectedMission, setSelectedMission] = useState(null);
-const [isSelected, setIsSelected] = useState(false);
 
 const backendAPI = {
   postSuccess: async (user_id, timer_id, is_correct) => {
@@ -50,7 +48,7 @@ const backendAPI = {
   }
 }
 
-function MissionSection({ mission = { title, description }, onSelect }) {
+function MissionSection({ mission, onSelect }) {
   return (
     <section onClick={ onSelect }>
       <h3>{ mission.title }</h3>
@@ -59,7 +57,7 @@ function MissionSection({ mission = { title, description }, onSelect }) {
   )
 }
 
-function MissionSelection() {
+function MissionSelection({ setSelectedMission, setIsSelected }) {
   return (
     <div className="mission-container" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <h2>미션을 선택하세요.</h2>
@@ -81,7 +79,7 @@ function MissionSelection() {
  */
 function randomMission(index) {
   switch (index) {
-    case 0: // 랜덤 계산 문제 생성
+    case 0: {// 랜덤 계산 문제 생성
       let num1 = Math.floor(Math.random() * 99) + 1;
       let num2 = Math.floor(Math.random() * 99) + 1;
       let operator = Math.random() < 0.5 ? "+" : "-";
@@ -89,13 +87,15 @@ function randomMission(index) {
         question: `${num1} ${operator} ${num2}`,
         answer: operator === "+" ? num1 + num2 : num1 - num2
       };
-    case 1: // 랜덤 구구단 문제 생성
+    }
+    case 1: {// 랜덤 구구단 문제 생성
       let num1 = Math.floor(Math.random() * 9) + 1;
       let num2 = Math.floor(Math.random() * 9) + 1;
       return {
         question: `${num1} × ${num2}`,
         answer: num1 * num2
       };
+    }
     default:
         return;
   }
@@ -120,9 +120,9 @@ function MissionProcess({ selectedMission }) {
           value={userAnswer}
           onChange={(e) => setUserAnswer(e.target.value)}
         />
-        <button onClick={() => {
-          if (parseInt(userAnswer) === missionData.answer) {
-            backendAPI.postSuccess("user_id", "timer_id", true);
+        <button onClick={async () => {
+          if (Number(userAnswer) === missionData.answer) {
+            await backendAPI.postSuccess("user_id", "timer_id", true);
             setResult("정답이에요! 🎉\n토끼가 당근을 먹고 힘을 냈어요 🥕");
             // RestSuccess로 이동
           } else {
@@ -136,9 +136,12 @@ function MissionProcess({ selectedMission }) {
 }
 
 function Mission() {
+  const [selectedMission, setSelectedMission] = useState(null);
+  const [isSelected, setIsSelected] = useState(false);
+
   return (
     <>
-    {!isSelected && <MissionSelection />}
+    {!isSelected && <MissionSelection setSelectedMission={setSelectedMission} setIsSelected={setIsSelected} />}
     {isSelected && <MissionProcess selectedMission={selectedMission} />}
     </>
   )
