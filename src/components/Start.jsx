@@ -42,7 +42,7 @@ function ContentTypeOption({ contentType, setSelectedContentType }) {
   )
 }
 
-function ContentTypeSelection({ setSelectedContentType }) {
+function ContentTypeSelection({ contentTypes, setSelectedContentType }) {
   const [userInput, setUserInput] = useState("");
   return (
     <>
@@ -90,7 +90,7 @@ function Start() {
     
     <h2>타이머 설정</h2>
     <h4>콘텐츠 유형 선택</h4>
-    <ContentTypeSelection setSelectedContentType={setSelectedContentType} />
+    <ContentTypeSelection contentTypes={contentTypes} setSelectedContentType={setSelectedContentType} />
     <h4>시간 설정</h4>
     <span>{timerlength}분</span>
     <TimerInput timerlength={timerlength} setTimerLength={setTimerLength} />

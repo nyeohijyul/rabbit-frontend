@@ -123,11 +123,11 @@ function MissionProcess({ selectedMission }) {
         <button onClick={async () => {
           if (Number(userAnswer) === missionData.answer) {
             await backendAPI.postSuccess("user_id", "timer_id", true);
-            setResult("정답이에요! 🎉\n토끼가 당근을 먹고 힘을 냈어요 🥕");
+            setResult("정답이에요! 🎉 토끼가 당근을 먹고 힘을 냈어요 🥕");
             // RestSuccess로 이동
           } else {
             // backendAPI.postSuccess("user_id", "timer_id", false);
-            setResult("아쉬워요 😢\n한 번 더 도전해볼까요?");
+            setResult("아쉬워요 😢 한 번 더 도전해볼까요?");
           }
         }}>입력</button>
       <p>{result}</p>
