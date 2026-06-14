@@ -1,4 +1,5 @@
-import useNavigate from "react-router-dom";
+// 미션 완료 화면
+import { useNavigate } from "react-router-dom";
 const stateMessage = {
   HEALTHY: "토끼가 건강합니다.",
   TIRED: "토끼가 피곤해요.",

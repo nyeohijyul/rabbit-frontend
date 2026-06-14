@@ -1,3 +1,4 @@
+// 콘텐츠 시작 화면
 /**
  * {
 "timer_id": 15,
@@ -7,29 +8,20 @@
  */
 import { useState, useEffect } from 'react';
 
-const BASE_URL = "./api";
+const BASE_URL = "http://15.164.93.68:8080";
 
 const url = `${BASE_URL}/timer/start`;
-const mockupResponse = JSON.parse(`
-  {
-    "timer_id": 15,
-    "started_at": "2026-06-01T15:00:00",
-    "message": "타이머 시작"
-  }
-`);
 
 const backendAPI = {
   postTimerStart: async (contentType, timerLength) => {
-    /*
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contentType, timerLength }),
+      // body: JSON.stringify({ contentType, timerLength }),
+      body: JSON.stringify({}),
     });
     const data = await response.json();
     return data;
-    */
-    return mockupResponse;
   }
 }
 

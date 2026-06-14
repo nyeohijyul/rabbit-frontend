@@ -1,3 +1,4 @@
+// 미션 화면
 /**
  * @param { user_id, timer_id, is_correct }
  * @returns { result, added_carrot, total_carrots, rabbit_state }
@@ -16,17 +17,9 @@
 
 import { useState, useEffect } from "react";
 
-const BASE_URL = "./api";
+const BASE_URL = "http://15.164.93.68:8080";
 
 const url = `${BASE_URL}/rest/success`;
-const mockupResponse = JSON.parse(`
-  {
-    "result": "SUCCESS",
-    "added_carrot": 1,
-    "total_carrots": 13,
-    "rabbit_state": "HEALTHY"
-  }
-`);
 
 const missions = [
   { title: "랜덤 계산 문제", description: "설명" },
@@ -35,16 +28,18 @@ const missions = [
 
 const backendAPI = {
   postSuccess: async (user_id, timer_id, is_correct) => {
-    /*
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id, timer_id, is_correct }),
+      // body: JSON.stringify({ user_id, timer_id, is_correct }),
+      body: JSON.stringify({
+        "user_id": 1,
+        "timer_id": 15,
+        "is_correct": is_correct
+      })
     });
     const data = await response.json();
     return data;
-    */
-    return mockupResponse;
   }
 }
 
@@ -122,8 +117,8 @@ function MissionProcess({ selectedMission }) {
         />
         <button onClick={async () => {
           if (Number(userAnswer) === missionData.answer) {
-            await backendAPI.postSuccess("user_id", "timer_id", true);
             setResult("정답이에요! 🎉 토끼가 당근을 먹고 힘을 냈어요 🥕");
+            await backendAPI.postSuccess("user_id", "timer_id", true);
             // RestSuccess로 이동
           } else {
             // backendAPI.postSuccess("user_id", "timer_id", false);
