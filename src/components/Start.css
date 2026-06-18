@@ -1,0 +1,133 @@
+body {
+  background-color: #FEF7F3;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Pretendard', sans-serif;
+  letter-spacing: 0;
+  box-sizing: border-box;
+  color: #1f1f1f;
+  line-height: normal;
+  text-align: start;
+}
+.start-container {
+  margin: 50px 18px;
+}
+label:has(input:checked) {
+  filter: brightness(0.95);
+}
+.checked {
+  filter: brightness(0.95);
+}
+.semibold {
+  font-weight: 600;
+}
+.medium {
+  font-weight: 500;
+}
+
+.start-header {
+  position: relative;
+  text-align: end;
+  height: 227px;
+  & img {
+    position: absolute;
+    top: 0px;
+    right: -18px;
+  }
+  & .description {
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    right: 163px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: start;
+    & p:nth-child(1) {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    & p:nth-child(2) {
+      font-size: 14px;
+      color: #666;
+    }
+  }
+}
+.start-form {
+  & button:hover, button:active, label:hover {
+    filter: brightness(0.9);
+  }
+  & > p {
+    font-size: 15px;
+    height: 18px;
+    margin-bottom: 18px;
+  }
+}
+.start-content-input {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 9px;
+  margin-bottom: 33px;
+  & label {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background-color: #FDFDFE;
+    border-radius: 12px;
+    & * {
+      text-align: center;
+    }
+    & p {
+      font-size: 14px;
+    }
+  }
+}
+.start-timer-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 40px;
+  & button {
+    background-color: #FDFDFE;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 14px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.start-button {
+  position: relative;
+  overflow: hidden;
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+.start-button > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  border-radius: 14px;
+  border: 1px solid #FE9957;
+  background-color: #FE9957;
+  & * {
+    display: inline;
+    text-align: center;
+    color: #fff;
+  }
+}
+.start-container input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}

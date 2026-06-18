@@ -1,12 +1,17 @@
-// 콘텐츠 시작 화면
-/**
- * {
-"timer_id": 15,
-"started_at": "2026-06-01T15:00:00",
-"message": "타이머 시작"
-}
- */
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import './Start.css';
+
+import rabbitImg from '../assets/rabbit_happy.png';
+import reelsImg from '../assets/reels.png';
+import youtubeImg from '../assets/youtube.png';
+import webtoonImg from '../assets/webtoon.png';
+import gameImg from '../assets/game.png';
+import etcImg from '../assets/setting.png';
+
+import rabbit_healthyImg from '../assets/rabbit_healthy.png';
+import startSvg from '../assets/start.svg'
 
 const BASE_URL = "http://15.164.93.68:8080";
 
@@ -21,80 +26,142 @@ const backendAPI = {
       body: JSON.stringify({}),
     });
     const data = await response.json();
+    console.log(data)
     return data;
   }
 }
 
-function ContentTypeOption({ contentType, setSelectedContentType }) {
-  return (
-    <label>
-      <input type="radio" name="contentType" value={contentType} onChange={ () => setSelectedContentType(contentType) } />
-      {contentType}
-    </label>
-  )
-}
-
-function ContentTypeSelection({ contentTypes, setSelectedContentType }) {
-  const [userInput, setUserInput] = useState("");
+function ContentTypeOptions({ content, setSelectedContentType }) {
   return (
     <>
-    {contentTypes.map((contentType) => (
-      <ContentTypeOption key={contentType} contentType={contentType} setSelectedContentType={setSelectedContentType} />
-    ))}
-    <label>
-      <input type="radio" name="contentType" value={userInput} onChange={ () => setSelectedContentType(userInput) } />
-      <input type="text" placeholder="콘텐츠 유형을 직접 입력하세요" value={userInput} onChange={ (e) => setUserInput(e.target.value) } />
-    </label>
+      {content.map((content, i) => (
+        <label className="content-type-option" key={i}>
+          <input type="radio" name="contentType" value={content.type} onChange={ () => setSelectedContentType(content.type) } />
+          <img src={content.img} width={73}/>
+          <p className='medium'>{content.type}</p>
+        </label>
+      ))}
     </>
   )
 }
-function TimerSetterButton({ minute, setTimerLength }) {
+
+function TimerInputButtons({ setTimerLength }) {
+  const [selected, setSelected] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const handleSubmit = () => {
+    setIsEditing(false);
+  };
+
   return (
-    <button onClick={ () => setTimerLength(minute) }>
-      {minute}분
-    </button>
+    <>
+      {[10,15,20,30].map((min, i) => (
+        <button
+          key = {i}
+          onClick = {() => {
+            setTimerLength(min);
+            setSelected(i);
+            setIsEditing(false);
+          }}
+          className = { (!isEditing && selected == i) ? "checked" : null }
+        >
+          {`${min}분`}
+        </button>
+      ))}
+      {/* <button onClick={ () => {} }>직접 설정</button> */}
+      {!isEditing ? (
+        <button onClick={() => setIsEditing(true)}>직접 설정</button>
+      ) : (
+        <input
+          className='input-button checked'
+          autoFocus
+          onChange={(e) => {
+            if (Number.isNaN(Number(e.target.value))) {
+              setTimerLength('');
+              e.target.value='';
+            } else {
+              setTimerLength(e.target.value);
+            }
+          }}
+        />
+      )}
+    </>
   )
 }
-function TimerChangeButton({ minutechange, setTimerLength, timerlength }) {
+
+function ImgButton({ src, svgsrc, text, onClick }) {
   return (
-    <button onClick={ () => (timerlength + minutechange >= 3) && (timerlength + minutechange <= 120) && setTimerLength(timerlength + minutechange) }>
-      {minutechange > 0 ? `+${minutechange}분` : `${minutechange}분`}
-    </button>
-  )
-}
-function TimerInput({ timerlength, setTimerLength }) {
-  return (
-    <label>
-      타이머 시간: <input type="number" value={timerlength} min="3" max="120" step="1" onChange={ (e) => setTimerLength(Number(e.target.value)) } />
-    </label>
+    <>
+      <img onClick={onClick} width={100} src={src} style={{ position: 'absolute', top: -15, right: 30 }} />
+      <button onClick={onClick}>
+        <img src={svgsrc} width={20} height={20} style={{ marginRight: '12px' }} />
+        <p className='semibold' style={{ fontSize: '18px' }}>{text}</p>
+      </button>
+    </>
   )
 }
 
 function Start() {
-  const contentTypes = ["릴스", "쇼츠", "웹툰", "게임"];
+  const content = [
+    {type: "릴스", img: reelsImg},
+    {type: "유튜브", img: youtubeImg},
+    {type: "웹툰", img: webtoonImg},
+    {type: "게임", img: gameImg},
+    {type: "기타", img: etcImg}
+  ];
   const [selectedContentType, setSelectedContentType] = useState(null);
-  const [timerlength, setTimerLength] = useState(20);
+  const [timerlength, setTimerLength] = useState();
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href =
+      "https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css";
+    document.head.appendChild(link);
+  }, []);
+  const navigate = useNavigate();
+
+  function startTimer () {
+    if (selectedContentType && timerlength) {
+      backendAPI.postTimerStart(selectedContentType, timerlength);
+      navigate("/timer", {
+        state: {timerLength: timerlength, contentType: selectedContentType}
+      })
+    }
+  }
 
   return (
     <>
-    {/* Home 으로 이동 */}
-    <button>홈 복귀</button>
-    
-    <h2>타이머 설정</h2>
-    <h4>콘텐츠 유형 선택</h4>
-    <ContentTypeSelection contentTypes={contentTypes} setSelectedContentType={setSelectedContentType} />
-    <h4>시간 설정</h4>
-    <span>{timerlength}분</span>
-    <TimerInput timerlength={timerlength} setTimerLength={setTimerLength} />
-    <TimerSetterButton minute={20} setTimerLength={setTimerLength} />
-    <TimerSetterButton minute={30} setTimerLength={setTimerLength} />
-    <TimerSetterButton minute={40} setTimerLength={setTimerLength} />
-    <TimerChangeButton minutechange={1} setTimerLength={setTimerLength} timerlength={timerlength} />
-    <TimerChangeButton minutechange={-1} setTimerLength={setTimerLength} timerlength={timerlength} />
-    <TimerChangeButton minutechange={5} setTimerLength={setTimerLength} timerlength={timerlength} />
-    <button onClick={() => backendAPI.postTimerStart(selectedContentType, timerlength)}>시작하기</button>
-    {/* Timer 로 이동 */}
-    {/* context 이용해서 종료시각 계산하기? */}
+    <div className="start-container">
+      <div className="start-header">
+        <img src={rabbitImg} alt="모모" height={227} />
+        <div className='description'>
+          <p className='semibold'>어떤 콘텐츠를<br />이용할까요?</p>
+          <p>집중할 콘텐츠를 선택하면<br />모모가 휴식 타이밍을 알려줄게요!</p>
+        </div>
+      </div>
+      <div className="start-content">
+        <div className="start-form">
+          <p className='semibold'>콘텐츠 선택</p>
+          <div className="start-content-input">
+            <ContentTypeOptions content={content} setSelectedContentType={setSelectedContentType} />
+          </div>
+        </div>
+        <div className="start-form">
+          <p className='semibold'>휴식 주기 선택</p>
+          {/* <span>{timerlength}분</span> */}
+          <div className="start-timer-input">
+            <TimerInputButtons setTimerLength={setTimerLength}/>
+          </div>
+        </div>
+        <div className="start-button">
+          {/* <img src={rabbit_healthyImg} />
+          <button onClick={() => backendAPI.postTimerStart(selectedContentType, timerlength)}>
+            <img src={startSvg} width={20} height={20} style={{ marginRight: '12px' }} />
+            <p className='semibold' style={{ fontSize: '18px' }}>시작하기</p>
+          </button> */}
+          <ImgButton src={rabbit_healthyImg} svgsrc={startSvg} text={'시작하기'} onClick={() => startTimer()} />
+        </div>
+      </div>
+    </div>
     </>
   )
 }
