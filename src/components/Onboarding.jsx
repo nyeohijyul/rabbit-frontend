@@ -24,10 +24,14 @@ export default function Onboarding() {
 
       const result = await onboardingUser(name);
 
-      console.log("온보딩 성공:", result);
-
-      localStorage.setItem("user_id", result.id ?? result.user_id);
-      localStorage.setItem("username", result.username ?? name);
+      localStorage.setItem(
+        "user_id",
+        result.id ?? result.user_id
+      );
+      localStorage.setItem(
+        "username",
+        result.username ?? name
+      );
 
       navigate("/home");
     } catch (error) {
@@ -42,7 +46,9 @@ export default function Onboarding() {
     <div className="onboarding">
       <h1 className="onboarding-title">
         <span>안녕하세요!</span>
-        <span className="second-line">만나서 반가워요 🖤</span>
+        <span className="second-line">
+          만나서 반가워요 🖤
+        </span>
       </h1>
 
       <p className="onboarding-subtitle">
@@ -53,7 +59,11 @@ export default function Onboarding() {
         어떻게 부르면 좋을까요?
       </p>
 
-      <img src={rabbitHi} alt="rabbit" className="rabbit-hi" />
+      <img
+        src={rabbitHi}
+        alt="rabbit"
+        className="rabbit-hi"
+      />
 
       <section className="onboarding-card">
         <h2>당신의 이름을 알려주세요 🥕</h2>
@@ -71,17 +81,29 @@ export default function Onboarding() {
             onChange={(e) => setName(e.target.value)}
           />
 
-          <img src={humanIcon} alt="user" className="human-icon" />
+          <img
+            src={humanIcon}
+            alt="user"
+            className="human-icon"
+          />
         </div>
 
         <button
-          className={`next-btn ${isValid ? "active" : ""}`}
+          className={`next-btn ${
+            isValid ? "active" : ""
+          }`}
           onClick={handleNext}
         >
-          <span>{loading ? "저장 중..." : "다음"}</span>
+          <span>
+            {loading ? "저장 중..." : "다음"}
+          </span>
 
           {!loading && (
-            <img src={nextIcon} alt="next" className="next-icon" />
+            <img
+              src={nextIcon}
+              alt="next"
+              className="next-icon"
+            />
           )}
         </button>
       </section>
