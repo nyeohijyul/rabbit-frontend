@@ -24,10 +24,14 @@ export default function Onboarding() {
 
       const result = await onboardingUser(name);
 
-      console.log("온보딩 성공:", result);
-
-      localStorage.setItem("user_id", result.id);
-      localStorage.setItem("username", name);
+      localStorage.setItem(
+        "user_id",
+        result.id ?? result.user_id
+      );
+      localStorage.setItem(
+        "username",
+        result.username ?? name
+      );
 
       navigate("/home");
     } catch (error) {
@@ -85,10 +89,14 @@ export default function Onboarding() {
         </div>
 
         <button
-          className={`next-btn ${isValid ? "active" : ""}`}
+          className={`next-btn ${
+            isValid ? "active" : ""
+          }`}
           onClick={handleNext}
         >
-          <span>{loading ? "저장 중..." : "다음"}</span>
+          <span>
+            {loading ? "저장 중..." : "다음"}
+          </span>
 
           {!loading && (
             <img
