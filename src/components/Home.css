@@ -1,0 +1,449 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Pretendard", sans-serif;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #f8f3f0;
+}
+
+.home {
+  width: 393px;
+  height: 852px;
+  margin: 0 auto;
+  background: #f8f3f0;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* 상단 */
+
+.home-header {
+  width: 336px;
+  height: 60px;
+  display: flex;
+  position: relative;
+  margin-left: 18px;
+  margin-top: 50px;
+}
+
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  background: #fdf0e0;
+}
+
+.header-text {
+  width: 140px;
+  height: 34px;
+  position: absolute;
+  left: 54px;
+  top: 3px;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #111;
+  text-align: left;   
+  word-break: keep-all;
+}
+
+.ring-icon {
+  width: 22px;
+  height: 23px;
+  position: absolute;
+  right: 0;           
+  top: 0;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* 배경 카드 */
+
+.hero-card {
+  width: 357px;
+  height: 251px;
+  margin: 18px auto 0;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+
+.room-bg {
+  width: 357px;
+  height: 251px;
+  object-fit: cover;
+}
+
+.hero-rabbit {
+  width: 200px;
+  height: 270px;
+  object-fit: contain;
+  position: absolute;
+  left: 165px;
+  top: 10px;
+  transform: scale(1.12);
+  transform-origin: center bottom;
+}
+
+.speech-box {
+  width: 181px;
+  height: 56px;
+  position: absolute;
+  left: 20px;
+  top: 45px;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.7);
+
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  z-index: 3;
+}
+
+/* 말풍선 아래 세모 */
+.speech-tail {
+  position: absolute;
+
+  left: 188px;
+  top: 83px;
+
+  width: 20px;
+  height: 27px;
+
+  background: rgba(255, 255, 255, 0.7);
+
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+
+  transform: rotate(39deg);
+
+  z-index: 2;
+  
+}
+
+.carrot-card {
+  width: 134px;
+  height: 60px;
+  position: absolute;
+  left: 20px;
+  top: 165px;
+
+  background: white;
+  border-radius: 18px;
+  padding:10px 20px 10px 5px;
+
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.carrot-card img {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  margin-left: -8px;
+}
+
+.carrot-card div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: auto;
+  white-space: nowrap;
+}
+
+.carrot-card span {
+  display: block;
+  font-size: 14px;
+  color: #777;
+  line-height: 17px;
+}
+
+.carrot-card strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  line-height: 22px;
+}
+
+/* 오늘의 기록 */
+
+.record-section {
+  width: 357px;
+  height: 145px;
+
+  margin: 16px auto 0;
+
+  background: white;
+  border-radius: 24px;
+
+  padding: 20px 15px 20px 15px;
+}
+
+/* 제목 + 자세히 보기 */
+
+.record-title-row {
+  width: 320px;
+  height: 18px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.record-title-row h2 {
+  font-size: 17.5px;
+  font-weight: 650;
+  line-height: 17px;
+  margin-top: 7px;
+
+  color: #111;
+}
+
+.record-title-row button {
+  height: 10px;
+
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19px;
+
+  color: #555;
+  cursor: pointer;
+
+  padding: 0;
+  margin: 0;
+}
+
+.record-title-row button img {
+  width: 8px;
+  height: 13px;
+  object-fit: contain;
+}
+
+/* 기록 카드 3개 */
+
+.record-cards {
+  width: 100%;
+  height: 70px;
+
+  margin-top: 16px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.record-card {
+  width: 100px;
+  height: 70px;
+
+  background: white;
+  border-radius: 12px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.record-card p {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+
+  color: #777;
+}
+
+.record-card strong {
+  margin-top: 8px;
+
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19px;
+
+  color: #111;
+}
+
+
+/* 콘텐츠 시작 */
+
+.start-button {
+  width: 357px;
+  height: 60px;
+  margin: 20px auto 0;
+
+  border: none;
+  border-radius: 14px;
+  background: #fe9957;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  color: white;
+  font-size: 20px;
+  font-weight: 515;
+  cursor: pointer;
+}
+
+.play-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.start-rabbit {
+  width: 56px;
+  height: 62px;
+
+  position: absolute;
+  right: 36px;
+  bottom: 0;
+
+  object-fit: contain;
+}
+
+/* 성장 카드 */
+
+.growth-card {
+  width: 357px;
+  height: 79px;
+  margin: 14px auto 0;
+  background: #f3f5e9;
+  border-radius: 14px;
+
+  padding: 0 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.growth-card p {
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  text-align: left !important;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color:#111;
+  font-weight:450;
+
+  width: 150px;
+}
+
+
+
+.growth-card button {
+  width: 104px;
+  height: 34px;
+
+  border: 1px solid #9baa7e;
+  border-radius: 12px;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 12px;
+  color:#575353;
+  cursor: pointer;
+}
+
+.growth-card button img {
+  width: 6px;
+  height: 10px;
+}
+
+/* 하단 네비 */
+
+.bottom-nav {
+  width: 357px;
+  height: 60px;
+
+  position: absolute;
+  left:18px;
+  bottom: 26px;
+
+  background: white;
+  border-radius: 27px;
+  padding: 17px 20px 10px 16px;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  gap:0.6px;
+}
+
+.nav-item {
+  width: 60px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.nav-item img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.nav-item.active {
+  color: #fe9957;
+}
+
+.nav-item.active img {
+  width: 17px;
+  height: 18px;
+}

@@ -1,0 +1,159 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Pretendard", sans-serif;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #f8f3f0;
+}
+
+.onboarding {
+  width: 393px;
+  height: 852px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #f8f3f0;
+  padding-top: 70px;
+}
+
+.onboarding-title {
+  width: 260px;
+  margin: 0 auto;
+  text-align: center;
+  color: #111;
+}
+
+.onboarding-title span {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 29px;
+}
+
+.second-line {
+  white-space: nowrap;
+}
+
+.onboarding-subtitle {
+  width: 320px;
+  margin: 12px auto 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 16px;
+  color: #8b8b8b;
+}
+
+.onboarding-subtitle span {
+  color: #ff8f4f;
+  font-weight: 600;
+}
+
+.rabbit-hi {
+  width: 271px;
+  height: 271px;
+  object-fit: contain;
+  display: block;
+  margin: 8px auto 0;
+}
+
+.onboarding-card {
+  width: 368px;
+  height: 265px;
+  margin: -2px auto 0;
+  padding-top: 24px;
+  background: #fff;
+  border-radius: 24px;
+}
+
+.onboarding-card h2 {
+  width: 320px;
+  height: 24px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #111;
+}
+
+.onboarding-card p {
+  width: 320px;
+  height: 14px;
+  margin: 8px auto 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 14px;
+  color: #9c9c9c;
+}
+
+.name-input-box {
+  width: 320px;
+  height: 48px;
+  margin: 24px auto 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e7e7e7;
+  border-radius: 12px;
+}
+
+.name-input-box input {
+  flex: 1;
+  height: 19px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 12px;
+  line-height: 19px;
+  color: #111;
+}
+
+.name-input-box input::placeholder {
+  color: #9c9c9c;
+}
+
+.human-icon {
+  width: 13px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.next-btn {
+  width: 320px;
+  height: 60px;
+  margin: 10px auto 0;
+  border: none;
+  border-radius: 16px;
+  background: #d9d9d9;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-btn.active {
+  background: #ff914d;
+  cursor: pointer;
+}
+
+.next-icon {
+  width: 8px;
+  height: 14px;
+  object-fit: contain;
+}
