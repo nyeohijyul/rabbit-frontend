@@ -1,0 +1,352 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Pretendard", sans-serif;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #f8f3f0;
+}
+
+.reward {
+  width: 393px;
+  height: 852px;
+  margin: 0 auto;
+  background: #f8f3f0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 헤더 */
+
+.reward-header {
+  width: 357px;
+  height: 40px;
+  margin: 30px auto 0;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reward-back {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: none;
+  background: transparent;
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.reward-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+}
+
+.reward-carrot {
+  width: 60px;
+  height: 29px;
+
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: #ffffff;
+  border-radius: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding-left: 4px;
+  gap: 0;
+}
+
+.reward-carrot img {
+  width: 28px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.reward-carrot span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fe9957;
+}
+
+/* 제목 */
+
+.reward-title {
+  width: 357px;
+  height: 56px;
+  margin: 18px auto 0;
+  text-align: left;
+}
+
+.reward-title h2 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+  color: #111;
+}
+
+.reward-title p {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 15px;
+  color: #8b8b8b;
+}
+
+/* 대표 이미지 */
+
+.reward-preview {
+  width: 357px;
+  height: 231px;
+  margin: 18px auto 0;
+
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+}
+
+.preview-bg {
+  width: 357px;
+  height: 231px;
+  object-fit: cover;
+}
+
+.preview-rabbit {
+  width: 200px;
+  height: 200px;
+  
+
+  position: absolute;
+  right: 10px;
+  bottom: 15px;
+
+  object-fit: contain;
+  z-index: 2;
+}
+
+/* 배경 */
+
+.reward-section {
+  width: 357px;
+  height: 178px;
+  margin: 20px auto 0;
+}
+
+.reward-section-title {
+  width: 139px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-bottom: 14px;
+}
+
+.reward-section-title h3 {
+  width: 35px;
+  height: 24px;
+  font-size: 20px;
+  font-weight: 530;
+  color: #111;
+}
+
+.reward-section-title span {
+  width: 79px;
+  height: 17px;
+  font-size: 13px;
+  color: #8b8b8b;
+}
+
+.background-list {
+  width: 357px;
+  height: 114px;
+
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bg-item {
+  width: 67px;
+  height: 114px;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+}
+
+.bg-item.locked {
+  cursor: default;
+}
+
+.thumb {
+  width: 67px;
+  height: 79px;
+  position: relative;
+}
+
+.thumb > img:first-child {
+  width: 67px;
+  height: 79px;
+  object-fit: cover;
+}
+
+.state-icon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 6.45px;
+  top: 6.45px;
+}
+
+.bg-item p {
+  margin-top: 8px;
+  font-size: 11.5px;
+  line-height: 19px;
+  color: #999;
+}
+
+.bg-item.owned p,
+.bg-item.selected p {
+  color: #111;
+  font-weight: 500;
+}
+
+/* 리본 */
+
+.ribbon-section {
+  margin-top: 0;
+}
+
+.ribbon-list {
+  width: 357px;
+  height: 176px;
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.ribbon-item {
+  width: 110px;
+  height: 110px;
+  background: #ffffff;
+  border-radius: 8px;
+  position: relative;
+  text-align: center;
+  padding-top: 3px;
+  gap: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.ribbon-item.locked {
+  cursor: default;
+}
+
+.ribbon-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.ribbon-lock {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 6.45px;
+  top: 6.45px;
+}
+
+.ribbon-item p {
+  margin-top: 0;
+  font-size: 12px;
+  line-height: 13px;
+  color: #999;
+}
+
+.ribbon-item.owned p,
+.ribbon-item.selected p {
+  color: #111;
+  font-weight: 500;
+}
+
+/* 하단 네비 */
+
+.reward-bottom-nav {
+  width: 357px;
+  height: 60px;
+
+  position: absolute;
+  left: 18px;
+  bottom: 26px;
+
+  background: white;
+  border-radius: 27px;
+  padding: 17px 20px 10px 16px;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  gap: 0.6px;
+}
+
+.reward-nav-item {
+  width: 60px;
+  height: 44px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+
+  color: #333;
+  cursor: pointer;
+}
+
+.reward-nav-item img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.reward-nav-item.active {
+  color: #fe9957;
+}
+
+.reward-nav-item.active img {
+  width: 17px;
+  height: 18px;
+}
