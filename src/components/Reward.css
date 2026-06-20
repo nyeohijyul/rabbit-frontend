@@ -29,6 +29,10 @@ body {
   position: relative;
 }
 
+.reward::-webkit-scrollbar {
+  display: none;
+}
+
 /* 헤더 */
 
 .reward-header {
