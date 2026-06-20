@@ -12,7 +12,14 @@ body {
   text-align: start;
 }
 .start-container {
-  margin: 50px 18px 0; /* 나중에 0 18px 로 변경 */
+  padding: 18px;
+
+  overflow-y: auto;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+  &::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  }
 }
 label:has(input:checked) {
   filter: brightness(0.95);
@@ -92,6 +99,7 @@ label:has(input:checked) {
   gap: 10px;
   margin-bottom: 40px;
   & > button {
+    flex-grow: 1;
     background-color: #FDFDFE;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -115,7 +123,8 @@ label:has(input:checked) {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #fff;
+  border-radius: 12px 12px 0 0;
+  background-color: #FFE7DA;
 }
 .timer-input-modal-wrapper {
   padding: 14px;
@@ -196,14 +205,14 @@ label:has(input:checked) {
   background-color: #FFE7DA;
 }
 
-.start-button {
+.start-timer-button {
   position: relative;
   overflow: hidden;
   &:hover {
     filter: brightness(0.9);
   }
 }
-.start-button > button {
+.start-timer-button > button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -223,4 +232,16 @@ label:has(input:checked) {
   opacity: 0;
   width: 0;
   height: 0;
+}
+
+@keyframes vibration {
+  from {
+    transform: translate(5px, 0);
+  }
+  to {
+    transform: translate(-5px, 0);
+  }
+}
+.vibration {
+  animation: vibration 0.1s 2;
 }

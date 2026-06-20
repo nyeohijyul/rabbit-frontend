@@ -41,16 +41,36 @@ const backendAPI = {
   }
 }
 
-function ContentTypeOptions({ content, setSelectedContentType }) {
+function ContentInputs({ content, selectedContentType, setSelectedContentType }) {
   return (
     <>
-      {content.map((content, i) => (
-        <label className="content-type-option" key={i}>
-          <input type="radio" name="contentType" value={content.type} onChange={ () => setSelectedContentType(content.type) } />
-          <img src={content.img} width={73}/>
-          <p className='medium'>{content.type}</p>
-        </label>
-      ))}
+      <p className='semibold' onClick={() => {setSelectedContentType('')}}>콘텐츠 선택</p>
+      <div className="start-content-input">
+        {content.map((content, i) => (
+          <label
+            className="content-type-option"
+            key={i}
+            // onClick={() => {
+            //   if (selectedContentType === content.type) {
+            //     setSelectedContentType('');
+            //     console.log(content.type)
+            //   } else {
+            //     setSelectedContentType(content.type);
+            //   }
+            // }}
+          >
+            <input
+              type="radio"
+              name="contentType"
+              value={content.type}
+              onChange={() => setSelectedContentType(content.type)}
+              checked={selectedContentType === content.type}
+            />
+            <img src={content.img} width={73}/>
+            <p className='medium'>{content.type}</p>
+          </label>
+        ))}
+      </div>
     </>
   )
 }
@@ -166,7 +186,8 @@ function CustomTimeInputModal({ timerLength, setTimerLength, setIsEditing }) {
     </>
   )
 }
-function TimerInputButtons({ timerLength, setTimerLength }) {
+
+function TimerInputs({ timerLength, setTimerLength }) {
   const [selected, setSelected] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const handleSubmit = () => {
@@ -175,26 +196,34 @@ function TimerInputButtons({ timerLength, setTimerLength }) {
 
   return (
     <>
-      {[10,15,20,30].map((min, i) => (
-        <button
-          key = {i}
-          onClick = {() => {
-            setTimerLength(min*60);
-            setSelected(i);
-            setIsEditing(false);
-          }}
-          className = { (!isEditing && selected == i) ? "checked" : null }
-        >
-          {`${min}분`}
-        </button>
-      ))}
-      {!isEditing ? (
-        <button className={selected === 'custom' ? "checked" : null} onClick={() => {setIsEditing(true); setSelected('custom');}}>직접 설정</button>
-      ) : (
-        <div className='timer-input-modal-container' onClick={() => setIsEditing(false)}>
-          <CustomTimeInputModal timerLength={timerLength} setTimerLength={setTimerLength} setIsEditing={setIsEditing} />
-        </div>
-      )}
+      <p className='semibold' onClick={() => {setTimerLength(0)}}>휴식 주기 선택</p>
+      <div className="start-timer-input">
+        {[10,15,20,30].map((min, i) => (
+          <button
+            key = {i}
+            onClick = {() => {
+              if (selected === i) {
+                setSelected(null);
+                setTimerLength(0);
+              } else {
+                setSelected(i);
+                setTimerLength(min*60);
+              }
+              setIsEditing(false);
+            }}
+            className = { (!isEditing && selected == i) ? "checked" : null }
+          >
+            {`${min}분`}
+          </button>
+        ))}
+        {!isEditing ? (
+          <button className={selected === 'custom' ? "checked" : null} onClick={() => {setIsEditing(true); setSelected('custom');}}>직접 설정</button>
+        ) : (
+          <div className='timer-input-modal-container' onClick={() => setIsEditing(false)}>
+            <CustomTimeInputModal timerLength={timerLength} setTimerLength={setTimerLength} setIsEditing={setIsEditing} />
+          </div>
+        )}
+      </div>
     </>
   )
 }
@@ -212,6 +241,7 @@ function ImgButton({ src, svgsrc, text, onClick }) {
 }
 
 function Start() {
+  const userId = localStorage.getItem("user_id");
   const content = [
     {type: "릴스", img: reelsImg, content: "REELS"},
     {type: "유튜브", img: youtubeImg, content: "YOUTUBE"},
@@ -226,8 +256,10 @@ function Start() {
     게임: "GAME",
     기타: "ETC",
   }
-  const [selectedContentType, setSelectedContentType] = useState(null);
+  const [selectedContentType, setSelectedContentType] = useState('');
   const [timerlength, setTimerLength] = useState(0);
+  const [alertAnimation, setAlertAnimation] = useState([false, false]);
+
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -235,14 +267,19 @@ function Start() {
       "https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css";
     document.head.appendChild(link);
   }, []);
+
   const navigate = useNavigate();
 
   function startTimer () {
     if (selectedContentType && timerlength) {
-      backendAPI.postTimerStart(undefined, contentTag[selectedContentType], timerlength);
+      backendAPI.postTimerStart(userId, contentTag[selectedContentType], timerlength);
       navigate("/timer", {
         state: {timerLength: timerlength, contentType: selectedContentType}
       })
+    } else {
+      setAlertAnimation([!selectedContentType, !timerlength]);
+      const interval = setTimeout(() => {setAlertAnimation([false, false])}, 200);
+      // clearInterval(interval);
     }
   }
 
@@ -257,20 +294,21 @@ function Start() {
         </div>
       </div>
       <div className="start-content">
-        <div className="start-form">
-          <p className='semibold'>콘텐츠 선택</p>
+        <div className={alertAnimation[0] ? "start-form vibration" : "start-form"}>
+          <ContentInputs content={content} selectedContentType={selectedContentType} setSelectedContentType={setSelectedContentType} />
+          {/* <p className='semibold'>콘텐츠 선택</p>
           <div className="start-content-input">
-            <ContentTypeOptions content={content} setSelectedContentType={setSelectedContentType} />
-          </div>
+            <ContentTypeOptions content={content} selectedContentType={selectedContentType} setSelectedContentType={setSelectedContentType} />
+          </div> */}
         </div>
-        <div className="start-form">
-          <p className='semibold'>휴식 주기 선택</p>
-          {/* <span>{timerlength}분</span> */}
+        <div className={alertAnimation[1] ? "start-form vibration" : "start-form"}>
+          <TimerInputs timerLength={timerlength} setTimerLength={setTimerLength} />
+          {/* <p className='semibold'>휴식 주기 선택</p>
           <div className="start-timer-input">
             <TimerInputButtons timerLength={timerlength} setTimerLength={setTimerLength}/>
-          </div>
+          </div> */}
         </div>
-        <div className="start-button">
+        <div className="start-timer-button">
           <ImgButton src={rabbit_healthyImg} svgsrc={startSvg} text={'시작하기'} onClick={() => startTimer()} />
         </div>
       </div>
