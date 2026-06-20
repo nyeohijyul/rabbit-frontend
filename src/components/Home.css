@@ -407,8 +407,8 @@ body {
   width: 357px;
   height: 60px;
 
-  position: fixed;
-  bottom: 96px;
+  position: sticky;
+  bottom: 26px;
   margin: 14px auto 0;
 
   background: white;
@@ -420,7 +420,6 @@ body {
   align-items: center;
 
   gap:0.6px;
-  z-index: 100;
 }
 
 .nav-item {
