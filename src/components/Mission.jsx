@@ -97,7 +97,7 @@ function Mission() {
 
   const checkAnswer = async () => {
     setShowResult(true);
-    if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId, undefined);
+    if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId ?? 1, undefined);
   }
 
   return (
