@@ -56,19 +56,19 @@ function SvgButton({ svgsrc, text, onClick, img }) {
   )
 }
 
-function TimerChart({ timerLength = 10, onClick, isRunning, setIsRunning, setShowPopup, autostart=false }) {
+function TimerChart({ timerLength = 600, onClick, isRunning, setIsRunning, setShowPopup, autostart=false }) {
   const size = 265;
   const stroke = 19.5;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
 
-  const [timeLeft, setTimeLeft] = useState(timerLength*60);
+  const [timeLeft, setTimeLeft] = useState(timerLength);
 
   const intervalRef = useRef(null);
   const endTimeRef = useRef(null);
 
   useEffect(() => {
-    setTimeLeft(timerLength*60)
+    setTimeLeft(timerLength)
   }, [timerLength])
 
   // 시작 / 재시작
@@ -111,7 +111,7 @@ function TimerChart({ timerLength = 10, onClick, isRunning, setIsRunning, setSho
   const reset = () => {
     clearInterval(intervalRef.current);
     setIsRunning(false);
-    setTimeLeft(timerLength*60);
+    setTimeLeft(timerLength);
   };
 
   useEffect(() => {
@@ -119,14 +119,19 @@ function TimerChart({ timerLength = 10, onClick, isRunning, setIsRunning, setSho
   }, []);
 
   // 진행률
-  const progress = timeLeft / (timerLength*60);
+  const progress = timeLeft / (timerLength);
 
   const offset = circumference * (1 - progress);
 
   const formatTime = (sec) => {
-    const m = String(Math.floor(sec / 60)).padStart(2, "0");
+    const h = Math.floor(sec / 3600);
+    const m = String(Math.floor((sec - h*3600) / 60)).padStart(2, "0");
     const s = String(Math.floor(sec % 60)).padStart(2, "0");
-    return `${m} : ${s}`;
+    if (h) {
+      return `${String(h).padStart(2, "0")} : ${m} : ${s}`;
+    } else {
+      return `${m} : ${s}`;
+    }
   };
 
   return (
@@ -162,7 +167,7 @@ function TimerChart({ timerLength = 10, onClick, isRunning, setIsRunning, setSho
         {/* 중앙 텍스트 */}
         <div className='timer-center-text'>
           <p className='medium'>{!isRunning ? '타이머' : '휴식 중이에요!'}</p>
-          <p className='medium'>{formatTime(timeLeft)}</p>
+          <p className={timeLeft > 3600 ? 'medium hour-text' : 'medium'}>{formatTime(timeLeft)}</p>
           <p>{!isRunning ? '시작을 눌러주세요.' : '남은 시간' }</p>
         </div>
       </div>
@@ -181,9 +186,6 @@ function TimerChart({ timerLength = 10, onClick, isRunning, setIsRunning, setSho
             <SvgButton onClick={pause} svgsrc={pauseSvg} img={{w:18, h:18}} text="일시정지" />
           </>
         )}
-        {/* <button onClick={start}>시작 / 재개</button>
-        <button onClick={pause}>일시정지</button>
-        <button onClick={reset}>리셋</button> */}
       </div>
     </>
   );
@@ -198,40 +200,153 @@ function TimerInputButtons({ timerLength, setTimerLength }) {
   return (
     <>
       {[10,20,30].map((min, i) => (
-        <button key={i} onClick={ () => setTimerLength(min) }>
+        <button key={i} onClick={ () => setTimerLength(min*60) }>
           {`${min}분`}
         </button>
       ))}
       
-      {/* <button onClick={ () => {} }>직접 설정</button> */}
-      {/* <button><input placeholder='직접 설정' type="number" step="1" onChange={ (e) => setTimerLength(Number(e.target.value)) } /></button> */}
       {!isEditing ? (
         <button onClick={() => setIsEditing(true)}>직접 설정</button>
       ) : (
-        <input
-          className='input-button'
-          autoFocus
-          onChange={(e) => {
-            if (Number.isNaN(Number(e.target.value))) {
-              e.target.value='';
-              setTimerLength('')
-            } else {
-              setTimerLength(e.target.value)
-            }
-          }}
-          onBlur={handleSubmit}
-        />
+        <div className='timer-input-modal-container' onClick={() => setIsEditing(false)}>
+          <CustomTimeInputModal timerLength={timerLength} setTimerLength={setTimerLength} setIsEditing={setIsEditing} />
+        </div>
       )}
     </>
   )
 }
 
-function ComputedTime({ min }) {
-  const sec = min * 60;
-  const m = String(Math.floor(sec / 60)).padStart(2, "0");
-  const s = String(Math.floor(sec % 60)).padStart(2, "0");
+const computeTime = (sec) => {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec - h*3600) / 60);
+  const s = Math.floor(sec % 60);
+  let tmp = '';
+  if (h) tmp += h + '시간 ';
+  if (m) tmp += m + '분 ';
+  if (s) tmp += s + '초 ';
+  return tmp.trim();
+}
+function ComputedTime({ sec }) {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec - h*3600) / 60);
+  const s = Math.floor(sec % 60);
+  console.log(h, m, s)
   return (
-    <p><span>{m}</span>분 <span>{s}</span>초</p>
+    <p>
+      {!!h && <><span>{String(h).padStart(2, "0")}</span>시간 </>}
+      {!!m && <><span>{String(m).padStart(2, "0")}</span>분 </>}
+      {!!s && <><span>{String(s).padStart(2, "0")}</span>초 </>}
+    </p>
+  )
+}
+
+function TimePicker({ min=0, max, setValue, initialLength }) {
+  const pickerRef = useRef(null);
+  const itemRefs = useRef([]);
+  const timerRef = useRef(null);
+  const selectedRef = useRef(0);
+  const [selected, setSelected] = useState(0);
+
+  useEffect(() => {
+    pickerRef.current.scrollTo({
+      top: initialLength * 33,
+      behavior: "smooth",
+    });
+    // console.log(initialLength)
+  }, [initialLength])
+
+  function handleScroll(e) {
+    const pickerRect = pickerRef.current.getBoundingClientRect();
+    const pickerCenterY = pickerRect.top + pickerRect.height / 2;
+    let closestIndex = 0
+    let minDistance;
+
+    itemRefs.current.forEach((item, i) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenterY = rect.top + rect.height / 2;
+      const distance = Math.abs(itemCenterY - pickerCenterY);
+      if (i === 0 || distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      };
+    })
+    selectedRef.current = closestIndex;
+    // selectedRef.current = Math.round(e.target.scrollTop / 33);
+
+    clearTimeout(timerRef.current);
+
+    timerRef.current = setTimeout(() => {
+      setValue(selectedRef.current + min);
+      setSelected(selectedRef.current + min);
+    }, 100);
+    // const scrollTop = e.target.scrollTop;
+
+    // const index = Math.round(scrollTop / 33);
+    // console.log(e.target.scrollTop);
+    // setSelected(index);
+
+    // setValue(closestIndex + min);
+  }
+  return (
+    <div
+      ref={pickerRef}
+      className='time-picker'
+      onScroll={handleScroll}
+    >
+      {Array(max - min).fill(0).map((_, i) => (
+        <div
+          key={i}
+          ref={el => itemRefs.current[i] = el}
+          className={selected === i ? 'picker-item medium selected' : 'picker-item medium'}
+        >{min + i}</div>
+      ))}
+    </div>
+  )
+}
+function CustomTimeInputModal({ timerLength, setTimerLength, setIsEditing }) {
+  const [selectedTime, setSelectedTime] = useState({
+    h: Math.floor(timerLength / 3600),
+    m: Math.floor((timerLength - Math.floor(timerLength / 3600)*3600) / 60),
+    s: Math.floor(timerLength % 60)
+  });
+  // const h = Math.floor(timerLength / 3600);
+  // const m = Math.floor((timerLength - h*3600) / 60);
+  // const s = Math.floor(timerLength % 60);
+  // console.log(timerLength)
+  const setValue = (key, value) => {
+    setSelectedTime(prev => ({
+      ...prev,
+      [key]: value
+    }))
+    // console.log(value)
+  }
+  return (
+    <>
+      <div className='timer-input-modal' onClick={(e) => e.stopPropagation()}>
+        <div className='timer-input-modal-wrapper'>
+          <div className='time-picker-container'>
+            <p onClick={() => setValue('h', 0)}>시</p>
+            <p onClick={() => setValue('m', 0)}>분</p>
+            <p onClick={() => setValue('s', 0)}>초</p>
+            <TimePicker max={100} setValue={(value) => setValue('h', value)} initialLength={selectedTime.h} />
+            <TimePicker max={60} setValue={(value) => setValue('m', value)} initialLength={selectedTime.m} />
+            <TimePicker max={60} setValue={(value) => setValue('s', value)} initialLength={selectedTime.s} />
+          </div>
+          <div className='time-picker-center'></div>
+          <button
+            className='timer-modal-button'
+            onClick={() => {
+              if (selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s) {
+                setTimerLength(selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s)
+              };
+              setIsEditing(false)
+            }}
+          >
+            <p className='medium'>설정완료</p>
+          </button>
+        </div>
+      </div>
+    </>
   )
 }
 
@@ -253,13 +368,13 @@ function TimerPopup({ contentType, timerLength, setShowPopup, setIsAutostart }) 
       <div className='timer-popup'>
         <div className='timer-popup-wrapper'>
           <img src={timerSvg} width={31} height={38}/>
-          <p className='semibold'>{timerLength}분째 {contentType}를 보고있어요</p>
+          <p className='semibold'>{computeTime(timerLength)}째 {contentType}를 보고있어요</p>
           <p style={{fontWeight:'bold'}}>잠시 쉬어가는 건 어떨까요?</p>
           <img src={rabbit_restingImg} height={241}/>
           <div className='timer-info'>
             <div>
               <p>설정한 휴식 시간</p>
-              <ComputedTime min={timerLength} />
+              <ComputedTime sec={timerLength} />
             </div>
             <img src={carrotImg} width={85}/>
             <div>
@@ -300,7 +415,7 @@ function TimerPopup({ contentType, timerLength, setShowPopup, setIsAutostart }) 
 
 function Timer({ timer_id, started_at=Date.now() }) {
   const [contentType, setContentType] = useState('');
-  const [timerLength, setTimerLength] = useState(10);
+  const [timerLength, setTimerLength] = useState(600);
   const [isRunning, setIsRunning] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -331,10 +446,10 @@ function Timer({ timer_id, started_at=Date.now() }) {
       {!showPopup ?
       <div className='timer-container'>
         <div className='timer-header'>
-          <Header text={'콘텐츠 이용 시간'} />
+          <Header text='콘텐츠 이용 시간' />
         </div>
         <div className='timer-contentType'>
-          <p className='medium'>{contentType + ' / ' + timerLength+ '분 휴식 주기'}</p>
+          <p className='medium'>{contentType + ' / ' + computeTime(timerLength) + ' 휴식 주기'}</p>
         </div>
         <div className='timer'>
           <TimerChart timerLength={timerLength} onClick={() => setShowSetting(!showSetting)} isRunning={isRunning} setIsRunning={setIsRunning} setShowPopup={setShowPopup} autostart={isAutostart} />
@@ -342,7 +457,7 @@ function Timer({ timer_id, started_at=Date.now() }) {
         {!isRunning && showSetting && <div className="timer-form">
           <p className='semibold'>시간 설정</p>
           <div className="timer-input">
-            <TimerInputButtons setTimerLength={setTimerLength}/>
+            <TimerInputButtons timerLength={timerLength} setTimerLength={setTimerLength} />
           </div>
         </div>}
         <div className="timer-rest-info">

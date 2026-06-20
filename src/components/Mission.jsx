@@ -94,7 +94,7 @@ function Mission() {
   const navigate = useNavigate();
   const locate = useLocation();
   const [contentType, setContentType] = useState('');
-  const [timerLength, setTimerLength] = useState(10);
+  const [timerLength, setTimerLength] = useState(600);
   useEffect(() => {
     if (locate.state) {
       setTimerLength(locate.state['timerLength']);

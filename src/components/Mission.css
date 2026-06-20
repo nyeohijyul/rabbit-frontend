@@ -12,9 +12,9 @@ body {
   text-align: start;
 }
 .mission-container {
-  margin: 50px 18px;
+  margin: 50px 18px 0; /* 나중에 0 18px 로 변경 */
 
-  & button:hover, button:active {
+  button:hover, button:active {
     filter: brightness(0.9);
   }
 }
@@ -30,11 +30,11 @@ body {
   align-items: center;
   justify-content: start;
   position: relative;
-  & button {
+  button {
     background-color: transparent;
     border: 0;
   }
-  & p {
+  p {
     font-size: 18px;
     position: absolute;
     top: 0;
@@ -73,10 +73,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  & p {
+  p {
     text-align: center;
   }
-  & p:nth-child(1) {
+  p:nth-child(1) {
     height: 32px;
     font-size: 16px;
     line-height: 32px;
@@ -88,13 +88,13 @@ body {
     border-radius: 23px;
 
   }
-  & p:nth-child(2) {
+  p:nth-child(2) {
     height: 55px;
     font-size: 46px;
     line-height: 55px;
     margin-bottom: 69px;
   }
-  & input {
+  input {
     width: calc(100% - 68px);
     height: 70px;
     text-align: center;
@@ -114,14 +114,14 @@ body {
 .comments {
   margin-bottom: 46px;
   height: 61px;
-  & p:nth-child(1) {
+  p:nth-child(1) {
     height: 29px;
     line-height: 29px;
     font-size: 24px;
     margin-bottom: 15px;
     text-align: center;
   }
-  & p:nth-child(2) {
+  p:nth-child(2) {
     height: 17px;
     line-height: 17px;
     font-size: 14px;

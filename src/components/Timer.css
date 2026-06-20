@@ -12,9 +12,9 @@ body {
   text-align: start;
 }
 .timer-container {
-  margin: 50px 18px;
+  margin: 50px 18px 0; /* 나중에 0 18px 로 변경 */
 
-  & button:hover, button:active {
+  button:hover, button:active {
     filter: brightness(0.9);
   }
 }
@@ -30,11 +30,11 @@ body {
   align-items: center;
   justify-content: start;
   position: relative;
-  & button {
+  button {
     background-color: transparent;
     border: 0;
   }
-  & p {
+  p {
     font-size: 18px;
     position: absolute;
     top: 0;
@@ -49,8 +49,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 20px;
-  & p {
+  margin-top: 20px;
+  p {
     height: 32px;
     padding: 7.5px 20px;
     line-height: 17px;
@@ -68,7 +68,7 @@ body {
 .timer-chart {
   position: relative;
   margin-top: 54.5px;
-  margin-bottom: 54.5px;
+  margin-bottom: 32.5px;
 }
 .timer-center-text {
   position: absolute;
@@ -76,7 +76,7 @@ body {
   left: 50%;
   width: 226px;
   transform: translate(-50%, -50%);
-  & p {
+  p {
     text-align: center;
     &:nth-child(1) {
       font-size: 16px;
@@ -99,6 +99,7 @@ body {
     }
   }
 }
+.hour-text { font-size: 40px !important; }
 .timer-buttons {
   display: flex;
   gap: 19px;
@@ -140,7 +141,7 @@ body {
 .timer-input {
   display: flex;
   justify-content: space-between;
-  & button {
+  & > button {
     background-color: #FDFDFE;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -152,6 +153,101 @@ body {
   }
 }
 
+.timer-input-modal-container {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+}
+.timer-input-modal {
+  position: fixed;
+  top: calc(100dvh - 328px);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+}
+.timer-input-modal-wrapper {
+  padding: 14px;
+  button {
+    background-color: #FE9957;
+  }
+}
+.timer-modal-button {
+  width: 100%;
+  height: 60px;
+  border-radius: 24px;
+  border: 1px solid #FE9957;
+  background-color: #FE9957;
+  p {
+    color: #fff;
+    text-align: center;
+    font-size: 18px;
+    height: 21px;
+    line-height: 21px;
+  }
+}
+.time-picker-container {
+  background-color: transparent;
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 29px 157px;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  margin-bottom: 18px;
+  & > p {
+    font-size: 14px;
+    /* height: 17px;
+    line-height: 17px;
+    margin: 6px auto; */
+    line-height: 29px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+  }
+}
+.time-picker {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+  &::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  }
+  &::before, &::after {
+    content: "";
+    display: block;
+    height: 66px;
+    flex-shrink: 0;
+  }
+}
+.picker-item {
+  scroll-snap-align: center;
+  font-size: 14px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  &:not(:last-child) {
+    margin-bottom: 8px;
+  }
+}
+.selected {
+  color: #F86500;
+}
+.time-picker-center {
+  position: absolute;
+  z-index: 1;
+  top: 109px;
+  /* bottom: 91px; */
+  left: 14px;
+  right: 14px;
+  height: 25px;
+  background-color: #FFE7DA;
+}
+
 .timer-rest-info {
   padding-right: 42px;
   margin-bottom: 14px;
@@ -159,13 +255,15 @@ body {
   align-items: center;
   background-color: #fff;
   border-radius: 14px;
-  & :last-child {
-    margin-left: auto;
-  }
 }
 .timer-rest {
   margin-left: 9px;
-  & p:nth-child(1) {
+}
+.earned-carrots {
+  margin-left: auto;
+}
+.timer-rest, .earned-carrots {
+  p:nth-child(1) {
     height: 17px;
     line-height: 17px;
     font-size: 14px;
@@ -182,7 +280,7 @@ body {
     }
   }
 }
-.input-button {
+/* .input-button {
   width: 79px;
   background-color: #FDFDFE;
   border: 1px solid #ccc;
@@ -192,7 +290,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-}
+} */
 
 
 .timer-popup-container {

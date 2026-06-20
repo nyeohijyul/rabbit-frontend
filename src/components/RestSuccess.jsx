@@ -58,18 +58,23 @@ function ContentInput({ setContentType, setIsChanging }) {
   )
 }
 
-function ComputedTime({ min }) {
-  const sec = min * 60;
-  const m = String(Math.floor(sec / 60)).padStart(2, "0");
-  const s = String(Math.floor(sec % 60)).padStart(2, "0");
+function ComputedTime({ sec }) {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec - h*3600) / 60);
+  const s = Math.floor(sec % 60);
+  console.log(h, m, s)
   return (
-    <p><span>{m}</span>분 <span>{s}</span>초</p>
+    <p>
+      {!!h && <><span>{String(h).padStart(2, "0")}</span>시간 </>}
+      {!!m && <><span>{String(m).padStart(2, "0")}</span>분 </>}
+      {!!s && <><span>{String(s).padStart(2, "0")}</span>초 </>}
+    </p>
   )
 }
 
 function RestSuccess() {
   const [contentType, setContentType] = useState('');
-  const [timerLength, setTimerLength] = useState(10);
+  const [timerLength, setTimerLength] = useState(600);
   const [isChanging, setIsChanging] = useState(false);
   const contentSrc = {
     릴스 : reelsImg,
@@ -124,7 +129,7 @@ function RestSuccess() {
             <img src={carrotImg} width={70} />
             <div className="rest-time">
               <p>이번 휴식 시간</p>
-              <ComputedTime min={timerLength} />
+              <ComputedTime sec={timerLength} />
             </div>
             <div className="earned-carrots">
               <p>획득한 당근</p>

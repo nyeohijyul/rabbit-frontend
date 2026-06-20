@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import './Start.css';
@@ -45,7 +45,110 @@ function ContentTypeOptions({ content, setSelectedContentType }) {
   )
 }
 
-function TimerInputButtons({ setTimerLength }) {
+const computeTime = (sec) => {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec - h*3600) / 60);
+  const s = Math.floor(sec % 60);
+  let tmp = '';
+  if (h) tmp += h + '시간 ';
+  if (m) tmp += m + '분 ';
+  if (s) tmp += s + '초 ';
+  return tmp.trim();
+}
+function TimePicker({ min=0, max, setValue, initialLength }) {
+  const pickerRef = useRef(null);
+  const itemRefs = useRef([]);
+  const timerRef = useRef(null);
+  const selectedRef = useRef(0);
+  const [selected, setSelected] = useState(0);
+
+  useEffect(() => {
+    pickerRef.current.scrollTo({
+      top: initialLength * 33,
+      behavior: "smooth",
+    });
+  }, [initialLength])
+
+  function handleScroll(e) {
+    const pickerRect = pickerRef.current.getBoundingClientRect();
+    const pickerCenterY = pickerRect.top + pickerRect.height / 2;
+    let closestIndex = 0
+    let minDistance;
+
+    itemRefs.current.forEach((item, i) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenterY = rect.top + rect.height / 2;
+      const distance = Math.abs(itemCenterY - pickerCenterY);
+      if (i === 0 || distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      };
+    })
+    selectedRef.current = closestIndex;
+
+    clearTimeout(timerRef.current);
+
+    timerRef.current = setTimeout(() => {
+      setValue(selectedRef.current + min);
+      setSelected(selectedRef.current + min);
+    }, 100);
+  }
+  return (
+    <div
+      ref={pickerRef}
+      className='time-picker'
+      onScroll={handleScroll}
+    >
+      {Array(max - min).fill(0).map((_, i) => (
+        <div
+          key={i}
+          ref={el => itemRefs.current[i] = el}
+          className={selected === i ? 'picker-item medium selected' : 'picker-item medium'}
+        >{min + i}</div>
+      ))}
+    </div>
+  )
+}
+function CustomTimeInputModal({ timerLength, setTimerLength, setIsEditing }) {
+  const [selectedTime, setSelectedTime] = useState({
+    h: Math.floor(timerLength / 3600),
+    m: Math.floor((timerLength - Math.floor(timerLength / 3600)*3600) / 60),
+    s: Math.floor(timerLength % 60)
+  });
+  const setValue = (key, value) => {
+    setSelectedTime(prev => ({
+      ...prev,
+      [key]: value
+    }))
+  }
+  return (
+    <>
+      <div className='timer-input-modal' onClick={(e) => e.stopPropagation()}>
+        <div className='timer-input-modal-wrapper'>
+          <div className='time-picker-container'>
+            <p onClick={() => setValue('h', 0)}>시</p>
+            <p onClick={() => setValue('m', 0)}>분</p>
+            <p onClick={() => setValue('s', 0)}>초</p>
+            <TimePicker max={100} setValue={(value) => setValue('h', value)} initialLength={selectedTime.h} />
+            <TimePicker max={60} setValue={(value) => setValue('m', value)} initialLength={selectedTime.m} />
+            <TimePicker max={60} setValue={(value) => setValue('s', value)} initialLength={selectedTime.s} />
+          </div>
+          <div className='time-picker-center'></div>
+          <button
+            className='timer-modal-button'
+            onClick={() => {
+              setTimerLength(selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s);
+              setIsEditing(false)
+            }}
+          >
+            <p className='medium'>설정완료</p>
+          </button>
+        </div>
+      </div>
+    </>
+  )
+}
+function TimerInputButtons({ timerLength, setTimerLength }) {
   const [selected, setSelected] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const handleSubmit = () => {
@@ -58,7 +161,7 @@ function TimerInputButtons({ setTimerLength }) {
         <button
           key = {i}
           onClick = {() => {
-            setTimerLength(min);
+            setTimerLength(min*60);
             setSelected(i);
             setIsEditing(false);
           }}
@@ -67,22 +170,12 @@ function TimerInputButtons({ setTimerLength }) {
           {`${min}분`}
         </button>
       ))}
-      {/* <button onClick={ () => {} }>직접 설정</button> */}
       {!isEditing ? (
-        <button onClick={() => setIsEditing(true)}>직접 설정</button>
+        <button className={selected === 'custom' ? "checked" : null} onClick={() => {setIsEditing(true); setSelected('custom');}}>직접 설정</button>
       ) : (
-        <input
-          className='input-button checked'
-          autoFocus
-          onChange={(e) => {
-            if (Number.isNaN(Number(e.target.value))) {
-              setTimerLength('');
-              e.target.value='';
-            } else {
-              setTimerLength(e.target.value);
-            }
-          }}
-        />
+        <div className='timer-input-modal-container' onClick={() => setIsEditing(false)}>
+          <CustomTimeInputModal timerLength={timerLength} setTimerLength={setTimerLength} setIsEditing={setIsEditing} />
+        </div>
       )}
     </>
   )
@@ -109,7 +202,7 @@ function Start() {
     {type: "기타", img: etcImg}
   ];
   const [selectedContentType, setSelectedContentType] = useState(null);
-  const [timerlength, setTimerLength] = useState();
+  const [timerlength, setTimerLength] = useState(0);
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -149,7 +242,7 @@ function Start() {
           <p className='semibold'>휴식 주기 선택</p>
           {/* <span>{timerlength}분</span> */}
           <div className="start-timer-input">
-            <TimerInputButtons setTimerLength={setTimerLength}/>
+            <TimerInputButtons timerLength={timerlength} setTimerLength={setTimerLength}/>
           </div>
         </div>
         <div className="start-button">
