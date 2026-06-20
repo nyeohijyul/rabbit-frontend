@@ -142,7 +142,7 @@ export default function Home() {
 
       <button
         className="start-button"
-        onClick={() => navigate("/stat")}
+        onClick={() => navigate("/start")}
       >
         <img src={playIcon} alt="" className="play-icon" />
         <span>콘텐츠 시작하기</span>
