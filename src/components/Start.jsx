@@ -283,7 +283,7 @@ function Start() {
 
   function startTimer () {
     if (selectedContentType && timerlength) {
-      backendAPI.postTimerStart(userId, contentTag[selectedContentType], timerlength);
+      backendAPI.postTimerStart(userId ?? 1, contentTag[selectedContentType], timerlength);
       navigate("/timer", {
         state: {
           timerLength: timerlength,

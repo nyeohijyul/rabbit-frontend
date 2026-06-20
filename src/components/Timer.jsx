@@ -463,7 +463,7 @@ function TimerPopup({ contentType, timerLength, setShowPopup, setIsAutostart }) 
                 src={rabbit_worriedImg}
                 text='나중에 할게요'
                 onClick={()=>{
-                  backendAPI.postRestSkip(userId);
+                  backendAPI.postRestSkip(userId ?? 1);
                   setIsAutostart(true);
                   setShowPopup(false)
                 }}
@@ -497,7 +497,7 @@ function Timer({ timer_id, started_at=Date.now() }) {
     } else {
       navigate('/start')
     }
-    setSuccessCount(backendAPI.getUserSuccessCount(userId));
+    setSuccessCount(backendAPI.getUserSuccessCount(userId ?? 1));
   }, [])
 
   useEffect(() => {
