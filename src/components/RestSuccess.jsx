@@ -74,9 +74,6 @@ function Modal({ contentType, setContentType, setIsChanging }) {
           <form
             className="rest-success-form"
             onSubmit={(e) => e.preventDefault()}>
-            <p
-              className='semibold'
-            >콘텐츠 선택</p>
             <div className="rest-success-content-input">
               {contents.map((content, i) => (
                 <label className="content-type-option" key={i}>
