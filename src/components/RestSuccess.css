@@ -222,7 +222,7 @@ body {
 }
 .rest-success-modal {
   position: fixed;
-  top: calc(100dvh - 400px);
+  top: calc(100dvh - 328px);
   bottom: 0;
   left: 0;
   right: 0;
@@ -271,7 +271,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 1fr 1fr;
   gap: 9px;
-  margin-bottom: 33px;
+  margin-bottom: 18px;
   label {
     display: inline-flex;
     flex-direction: column;
