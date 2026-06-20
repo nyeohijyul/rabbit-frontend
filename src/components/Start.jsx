@@ -18,15 +18,25 @@ const BASE_URL = "http://15.164.93.68:8080";
 const url = `${BASE_URL}/timer/start`;
 
 const backendAPI = {
-  postTimerStart: async (contentType, timerLength) => {
+  postTimerStart: async (userId=1, contentType, timerLength) => {
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // body: JSON.stringify({ contentType, timerLength }),
-      body: JSON.stringify({}),
+      body: JSON.stringify({ 
+        userId,
+        contentType,
+        focusMinutes: timerLength,
+        restMinutes: 0
+      }),
     });
+    console.log(JSON.stringify({ 
+        userId,
+        contentType,
+        focusMinutes: timerLength,
+        restMinutes: 0
+      }))
     const data = await response.json();
-    console.log(data)
+    console.log(data);
     return data;
   }
 }
@@ -104,6 +114,12 @@ function TimePicker({ min=0, max, setValue, initialLength }) {
           key={i}
           ref={el => itemRefs.current[i] = el}
           className={selected === i ? 'picker-item medium selected' : 'picker-item medium'}
+          onClick={() => {
+            pickerRef.current.scrollTo({
+              top: i * 33,
+              behavior: "smooth",
+            })
+          }}
         >{min + i}</div>
       ))}
     </div>
@@ -137,7 +153,9 @@ function CustomTimeInputModal({ timerLength, setTimerLength, setIsEditing }) {
           <button
             className='timer-modal-button'
             onClick={() => {
-              setTimerLength(selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s);
+              if (selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s) {
+                setTimerLength(selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s)
+              };
               setIsEditing(false)
             }}
           >
@@ -195,12 +213,19 @@ function ImgButton({ src, svgsrc, text, onClick }) {
 
 function Start() {
   const content = [
-    {type: "릴스", img: reelsImg},
-    {type: "유튜브", img: youtubeImg},
-    {type: "웹툰", img: webtoonImg},
-    {type: "게임", img: gameImg},
-    {type: "기타", img: etcImg}
+    {type: "릴스", img: reelsImg, content: "REELS"},
+    {type: "유튜브", img: youtubeImg, content: "YOUTUBE"},
+    {type: "웹툰", img: webtoonImg, content: "WEBTOON"},
+    {type: "게임", img: gameImg, content: "GAME"},
+    {type: "기타", img: etcImg, content: "ETC"}
   ];
+  const contentTag = {
+    릴스: "REELS",
+    유튜브: "YOUTUBE",
+    웹툰: "WEBTOON",
+    게임: "GAME",
+    기타: "ETC",
+  }
   const [selectedContentType, setSelectedContentType] = useState(null);
   const [timerlength, setTimerLength] = useState(0);
   useEffect(() => {
@@ -214,7 +239,7 @@ function Start() {
 
   function startTimer () {
     if (selectedContentType && timerlength) {
-      backendAPI.postTimerStart(selectedContentType, timerlength);
+      backendAPI.postTimerStart(undefined, contentTag[selectedContentType], timerlength);
       navigate("/timer", {
         state: {timerLength: timerlength, contentType: selectedContentType}
       })
@@ -246,11 +271,6 @@ function Start() {
           </div>
         </div>
         <div className="start-button">
-          {/* <img src={rabbit_healthyImg} />
-          <button onClick={() => backendAPI.postTimerStart(selectedContentType, timerlength)}>
-            <img src={startSvg} width={20} height={20} style={{ marginRight: '12px' }} />
-            <p className='semibold' style={{ fontSize: '18px' }}>시작하기</p>
-          </button> */}
           <ImgButton src={rabbit_healthyImg} svgsrc={startSvg} text={'시작하기'} onClick={() => startTimer()} />
         </div>
       </div>

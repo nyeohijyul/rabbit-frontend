@@ -83,7 +83,6 @@ function RestSuccess() {
     게임 : gameImg,
     기타 : etcImg
   };
-  // const [imgSrc, setImgSrc] = useState(null);
   const imgSrc = contentSrc[contentType];
   const navigate = useNavigate();
   const locate = useLocation();

@@ -150,9 +150,6 @@ label:has(input:checked) {
   margin-bottom: 18px;
   & > p {
     font-size: 14px;
-    /* height: 17px;
-    line-height: 17px;
-    margin: 6px auto; */
     line-height: 29px;
     text-align: center;
     border-bottom: 1px solid #e0e0e0;

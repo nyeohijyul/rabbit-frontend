@@ -21,14 +21,13 @@ const BASE_URL = "http://15.164.93.68:8080";
 const url = `${BASE_URL}/rest/skip`;
 
 const backendAPI = {
-  postRestSkip: async () => {
-    const response = await fetch(url, {
+  postRestSkip: async (uid=1) => {
+    const response = await fetch(`${url}?uid=${uid}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // body: JSON.stringify({ contentType, timerLength }),
-      body: JSON.stringify({}),
     });
     const data = await response.json();
+    console.log(data)
     return data;
   }
 }
@@ -252,7 +251,6 @@ function TimePicker({ min=0, max, setValue, initialLength }) {
       top: initialLength * 33,
       behavior: "smooth",
     });
-    // console.log(initialLength)
   }, [initialLength])
 
   function handleScroll(e) {
@@ -271,7 +269,6 @@ function TimePicker({ min=0, max, setValue, initialLength }) {
       };
     })
     selectedRef.current = closestIndex;
-    // selectedRef.current = Math.round(e.target.scrollTop / 33);
 
     clearTimeout(timerRef.current);
 
@@ -279,13 +276,6 @@ function TimePicker({ min=0, max, setValue, initialLength }) {
       setValue(selectedRef.current + min);
       setSelected(selectedRef.current + min);
     }, 100);
-    // const scrollTop = e.target.scrollTop;
-
-    // const index = Math.round(scrollTop / 33);
-    // console.log(e.target.scrollTop);
-    // setSelected(index);
-
-    // setValue(closestIndex + min);
   }
   return (
     <div
@@ -298,6 +288,12 @@ function TimePicker({ min=0, max, setValue, initialLength }) {
           key={i}
           ref={el => itemRefs.current[i] = el}
           className={selected === i ? 'picker-item medium selected' : 'picker-item medium'}
+          onClick={() => {
+            pickerRef.current.scrollTo({
+              top: i * 33,
+              behavior: "smooth",
+            })
+          }}
         >{min + i}</div>
       ))}
     </div>
@@ -309,16 +305,11 @@ function CustomTimeInputModal({ timerLength, setTimerLength, setIsEditing }) {
     m: Math.floor((timerLength - Math.floor(timerLength / 3600)*3600) / 60),
     s: Math.floor(timerLength % 60)
   });
-  // const h = Math.floor(timerLength / 3600);
-  // const m = Math.floor((timerLength - h*3600) / 60);
-  // const s = Math.floor(timerLength % 60);
-  // console.log(timerLength)
   const setValue = (key, value) => {
     setSelectedTime(prev => ({
       ...prev,
       [key]: value
     }))
-    // console.log(value)
   }
   return (
     <>

@@ -16,7 +16,6 @@ const backendAPI = {
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // body: JSON.stringify({ contentType, timerLength }),
       body: JSON.stringify({
         user_id, timer_id, is_correct
       }),
@@ -39,30 +38,8 @@ function Header({ text }) {
   )
 }
 
-// const BASE_URL = "http://15.164.93.68:8080";
-
-// const url = `${BASE_URL}/rest/success`;
-
-// const backendAPI = {
-//   postSuccess: async (user_id, timer_id, is_correct) => {
-//     const response = await fetch(url, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       // body: JSON.stringify({ user_id, timer_id, is_correct }),
-//       body: JSON.stringify({
-//         "user_id": 1,
-//         "timer_id": 15,
-//         "is_correct": is_correct
-//       })
-//     });
-//     const data = await response.json();
-//     return data;
-//   }
-// }
-
 function randomMission() {
   let index = Math.floor(Math.random()*2);
-  // console.log(index)
   switch (index) {
     case 0: {// 랜덤 계산 문제 생성
       let num1 = Math.floor(Math.random() * 20) + 1;
@@ -106,7 +83,6 @@ function Mission() {
 
   useEffect(() => {
     setMissionData(randomMission());
-    // console.log(missionData)
   }, []);
 
   useEffect(() => {
@@ -139,9 +115,7 @@ function Mission() {
             <button onClick={async () => {
               setShowResult(true);
               if (Number(userAnswer) === missionData.answer) {
-                // await backendAPI.postSuccess("user_id", "timer_id", true);
-                // RestSuccess로 이동
-                backendAPI.postRestSuccess();                
+                backendAPI.postRestSuccess(undefined, undefined);                
               }
             }}>확인하기</button>
           </>
