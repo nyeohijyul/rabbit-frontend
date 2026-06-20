@@ -18,17 +18,22 @@ import timerSvg from '../assets/timer.svg'
 
 const BASE_URL = "http://15.164.93.68:8080";
 
-const url = `${BASE_URL}/rest/skip`;
-
 const backendAPI = {
-  postRestSkip: async (uid=1) => {
-    const response = await fetch(`${url}?userId=${uid}`, {
+  postRestSkip: async (userId) => {
+    const response = await fetch(`${BASE_URL}/rest/skip?userId=${userId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
     const data = await response.json();
     console.log(data)
     return data;
+  },
+  getUserSuccessCount: async (userId) => {
+    const response = await fetch(
+      `${BASE_URL}/users/${userId}/stats`
+    );
+    const data = await response.json();
+    return data.success_count;
   }
 }
 
@@ -48,7 +53,12 @@ function SvgButton({ svgsrc, text, onClick, img }) {
   return (
     <>
       <button onClick={onClick}>
-        <img src={svgsrc} width={img.w} height={img.h} style={{ marginRight: '5px' }} />
+        <img
+          src={svgsrc}
+          width={img.w}
+          height={img.h}
+          style={{ marginRight: '5px' }}
+        />
         {text}
       </button>
     </>
@@ -165,8 +175,12 @@ function TimerChart({ timerLength = 600, onClick, isRunning, setIsRunning, setSh
 
         {/* 중앙 텍스트 */}
         <div className='timer-center-text'>
-          <p className='medium'>{!isRunning ? '타이머' : '휴식 중이에요!'}</p>
-          <p className={timeLeft > 3600 ? 'medium hour-text' : 'medium'}>{formatTime(timeLeft)}</p>
+          <p className='medium'>
+            {!isRunning ? '타이머' : '휴식 중이에요!'}
+          </p>
+          <p className={timeLeft > 3600 ? 'medium hour-text' : 'medium'}>
+            {formatTime(timeLeft)}
+          </p>
           <p>{!isRunning ? '시작을 눌러주세요.' : '남은 시간' }</p>
         </div>
       </div>
@@ -175,14 +189,34 @@ function TimerChart({ timerLength = 600, onClick, isRunning, setIsRunning, setSh
       <div className='timer-buttons'>
         {!isRunning && (
           <>
-            <SvgButton onClick={onClick} svgsrc={changetimeSvg} img={{w:16, h:19.5}} text="시간변경" />
-            <SvgButton onClick={start} svgsrc={startSvg} img={{w:16, h:21}} text="시작" />
+            <SvgButton
+              onClick={onClick}
+              svgsrc={changetimeSvg}
+              img={{w:16, h:19.5}}
+              text="시간변경"
+            />
+            <SvgButton
+              onClick={start}
+              svgsrc={startSvg}
+              img={{w:16, h:21}}
+              text="시작"
+            />
           </>
         )}
         {isRunning && (
           <>
-            <SvgButton onClick={reset} svgsrc={resetSvg} img={{w:16, h:18.38}} text="재실행" />
-            <SvgButton onClick={pause} svgsrc={pauseSvg} img={{w:18, h:18}} text="일시정지" />
+            <SvgButton
+              onClick={reset}
+              svgsrc={resetSvg}
+              img={{w:16, h:18.38}}
+              text="재실행"
+            />
+            <SvgButton
+              onClick={pause}
+              svgsrc={pauseSvg}
+              img={{w:18, h:18}}
+              text="일시정지"
+            />
           </>
         )}
       </div>
@@ -199,16 +233,24 @@ function TimerInputButtons({ timerLength, setTimerLength }) {
   return (
     <>
       {[10,20,30].map((min, i) => (
-        <button key={i} onClick={ () => setTimerLength(min*60) }>
-          {`${min}분`}
-        </button>
+        <button
+          key={i}
+          onClick={() => setTimerLength(min*60)}
+        >{`${min}분`}</button>
       ))}
       
       {!isEditing ? (
         <button onClick={() => setIsEditing(true)}>직접 설정</button>
       ) : (
-        <div className='timer-input-modal-container' onClick={() => setIsEditing(false)}>
-          <CustomTimeInputModal timerLength={timerLength} setTimerLength={setTimerLength} setIsEditing={setIsEditing} />
+        <div
+          className='timer-input-modal-container'
+          onClick={() => setIsEditing(false)}
+        >
+          <CustomTimeInputModal
+            timerLength={timerLength}
+            setTimerLength={setTimerLength}
+            setIsEditing={setIsEditing}
+          />
         </div>
       )}
     </>
@@ -319,17 +361,28 @@ function CustomTimeInputModal({ timerLength, setTimerLength, setIsEditing }) {
             <p onClick={() => setValue('h', 0)}>시</p>
             <p onClick={() => setValue('m', 0)}>분</p>
             <p onClick={() => setValue('s', 0)}>초</p>
-            <TimePicker max={100} setValue={(value) => setValue('h', value)} initialLength={selectedTime.h} />
-            <TimePicker max={60} setValue={(value) => setValue('m', value)} initialLength={selectedTime.m} />
-            <TimePicker max={60} setValue={(value) => setValue('s', value)} initialLength={selectedTime.s} />
+            <TimePicker
+              max={100}
+              setValue={(value) => setValue('h', value)}
+              initialLength={selectedTime.h}
+            />
+            <TimePicker
+              max={60}
+              setValue={(value) => setValue('m', value)}
+              initialLength={selectedTime.m}
+            />
+            <TimePicker
+              max={60}
+              setValue={(value) => setValue('s', value)}
+              initialLength={selectedTime.s}
+            />
           </div>
-          <div className='time-picker-center'></div>
+          <div className='time-picker-center' />
           <button
             className='timer-modal-button'
             onClick={() => {
-              if (selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s) {
-                setTimerLength(selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s)
-              };
+              let selectedSecond = selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s;
+              if (selectedSecond) setTimerLength(selectedSecond);
               setIsEditing(false)
             }}
           >
@@ -344,9 +397,17 @@ function CustomTimeInputModal({ timerLength, setTimerLength, setIsEditing }) {
 function ImgButton({ src, text, onClick }) {
   return (
     <>
-      <img onClick={onClick} width={80} src={src} style={{ position: 'absolute', top: -5, right: 20 }} />
+      <img
+        onClick={onClick}
+        width={80}
+        src={src}
+        style={{ position: 'absolute', top: -5, right: 20 }}
+      />
       <button onClick={onClick}>
-        <p className='semibold' style={{ fontSize: '18px' }}>{text}</p>
+        <p
+          className='semibold'
+          style={{ fontSize: '18px' }}
+        >{text}</p>
       </button>
     </>
   )
@@ -355,34 +416,34 @@ function ImgButton({ src, text, onClick }) {
 function TimerPopup({ contentType, timerLength, setShowPopup, setIsAutostart }) {
   const userId = localStorage.getItem("user_id");
   const contentDescription = {
-    릴스: "릴스를 보고있어요",
-    유튜브: "유튜브를 보고있어요",
-    웹툰: "웹툰을 보고있어요",
-    게임: "게임을 하고있어요",
-    기타: "기타 콘텐츠를 하고있어요",
+    릴스: "째 릴스를 보고있어요",
+    유튜브: "째 유튜브를 보고있어요",
+    웹툰: "째 웹툰을 보고있어요",
+    게임: "째 게임을 하고있어요",
+    기타: "째 기타 콘텐츠를 하고있어요",
   }
 
   const navigate = useNavigate();
 
   return (
     <div className='timer-popup-container'>
-      <div className='timer-popup'>
+      <section className='timer-popup'>
         <div className='timer-popup-wrapper'>
-          <img src={timerSvg} width={31} height={38}/>
-          <p className='semibold'>{computeTime(timerLength)}째 {contentDescription[contentType]}</p>
+          <img src={timerSvg} width={31} height={38} />
+          <p className='semibold'>{computeTime(timerLength) + contentDescription[contentType]}</p>
           <p style={{fontWeight:'bold'}}>잠시 쉬어가는 건 어떨까요?</p>
           <img src={rabbit_restingImg} height={241}/>
-          <div className='timer-info'>
-            <div>
+          <section className='timer-info'>
+            <section>
               <p>설정한 휴식 시간</p>
               <ComputedTime sec={timerLength} />
-            </div>
+            </section>
             <img src={carrotImg} width={85}/>
-            <div>
+            <section>
               <p>미션 시 획득 당근</p>
               <p><span>+1</span>개</p>
-            </div>
-          </div>
+            </section>
+          </section>
           <div className='timer-popup-button orangebtn'>
             <ImgButton
               src={rabbit_cheeringImg}
@@ -409,19 +470,24 @@ function TimerPopup({ contentType, timerLength, setShowPopup, setIsAutostart }) 
             />
           </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }
 
 function Timer({ timer_id, started_at=Date.now() }) {
+  const [successCount, setSuccessCount] = useState(0);
   const [contentType, setContentType] = useState('');
   const [timerLength, setTimerLength] = useState(600);
   const [isRunning, setIsRunning] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [isAutostart, setIsAutostart] = useState(false);
+  
+  const navigate = useNavigate();
   const locate = useLocation();
+
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
     if (locate.state) {
@@ -430,6 +496,7 @@ function Timer({ timer_id, started_at=Date.now() }) {
     } else {
       navigate('/start')
     }
+    setSuccessCount(backendAPI.getUserSuccessCount(userId));
   }, [])
 
   useEffect(() => {
@@ -440,41 +507,57 @@ function Timer({ timer_id, started_at=Date.now() }) {
     document.head.appendChild(link);
   }, []);
 
-  const navigate = useNavigate();
   
   return (
     <>
-      {!showPopup ?
       <div className='timer-container'>
-        <div className='timer-header'>
+        <header className='timer-header'>
           <Header text='콘텐츠 이용 시간' />
-        </div>
-        <div className='timer-contentType'>
+        </header>
+        <section className='timer-contentType'>
           <p className='medium'>{contentType + ' / ' + computeTime(timerLength) + ' 휴식 주기'}</p>
-        </div>
-        <div className='timer'>
-          <TimerChart timerLength={timerLength} onClick={() => setShowSetting(!showSetting)} isRunning={isRunning} setIsRunning={setIsRunning} setShowPopup={setShowPopup} autostart={isAutostart} />
-        </div>
-        {!isRunning && showSetting && <div className="timer-form">
-          <p className='semibold'>시간 설정</p>
-          <div className="timer-input">
-            <TimerInputButtons timerLength={timerLength} setTimerLength={setTimerLength} />
-          </div>
-        </div>}
-        <div className="timer-rest-info">
+        </section>
+        <section className='timer'>
+          <TimerChart
+            timerLength={timerLength}
+            onClick={() => setShowSetting(!showSetting)}
+            isRunning={isRunning}
+            setIsRunning={setIsRunning}
+            setShowPopup={setShowPopup}
+            autostart={isAutostart}
+          />
+        </section>
+        {!isRunning && showSetting &&
+          <form className="timer-form">
+            <p className='semibold'>시간 설정</p>
+            <div className="timer-input">
+              <TimerInputButtons
+                timerLength={timerLength}
+                setTimerLength={setTimerLength}
+              />
+            </div>
+          </form>
+        }
+        <section className="timer-rest-info">
           <img src={carrotImg} width={85} />
-          <div className="timer-rest">
+          <section className="timer-rest">
             <p>지금까지 휴식 시간</p>
-            {/* <p><span>40</span>분 <span>12</span>초</p> */}
             <p><span>추후 제공</span></p>
-          </div>
-          <div className="earned-carrots">
+          </section>
+          <section className="earned-carrots">
             <p>오늘 성공</p>
-            <p><span>3</span>회</p>
-          </div>
-        </div>
+            <p><span>{successCount}</span>회</p>
+          </section>
+        </section>
       </div>
-      : <TimerPopup contentType={contentType} timerLength={timerLength} setShowPopup={setShowPopup} setIsAutostart={setIsAutostart}/>}
+      {showPopup &&
+        <TimerPopup
+          contentType={contentType}
+          timerLength={timerLength}
+          setShowPopup={setShowPopup}
+          setIsAutostart={setIsAutostart}
+        />
+      }
     </>
   )
 }

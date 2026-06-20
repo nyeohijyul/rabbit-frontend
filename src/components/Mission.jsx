@@ -9,11 +9,9 @@ import backSvg from '../assets/back.svg'
 
 const BASE_URL = "http://15.164.93.68:8080";
 
-const url = `${BASE_URL}/rest/success`;
-
 const backendAPI = {
   postRestSuccess: async (user_id=1, timer_id=1, is_correct=true) => {
-    const response = await fetch(url, {
+    const response = await fetch(`${BASE_URL}/rest/success`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -30,7 +28,7 @@ function Header({ text }) {
   const navigate = useNavigate();
   return (
     <>
-      <button onClick={() => {navigate('/home')}}>
+      <button onClick={() => navigate('/home')}>
         <img src={backSvg}/>
       </button>
       <p className='semibold'>{text}</p>
@@ -41,7 +39,7 @@ function Header({ text }) {
 function randomMission() {
   let index = Math.floor(Math.random()*2);
   switch (index) {
-    case 0: {// 랜덤 계산 문제 생성
+    case 0: {
       let num1 = Math.floor(Math.random() * 20) + 1;
       let num2 = Math.floor(Math.random() * 20) + 1;
       return {
@@ -49,7 +47,7 @@ function randomMission() {
         answer: num1 + num2
       };
     }
-    case 1: {// 랜덤 구구단 문제 생성
+    case 1: {
       let num1 = Math.floor(Math.random() * 8) + 2;
       let num2 = Math.floor(Math.random() * 8) + 2;
       return {
@@ -63,17 +61,19 @@ function randomMission() {
 }
 
 function Mission() {
-  const userId = localStorage.getItem("user_id");
-
   const [selectedMission, setSelectedMission] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
   const [missionData, setMissionData] = useState(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [showResult, setShowResult] = useState(false);
-  const navigate = useNavigate();
-  const locate = useLocation();
   const [contentType, setContentType] = useState('');
   const [timerLength, setTimerLength] = useState(600);
+  
+  const navigate = useNavigate();
+  const locate = useLocation();
+
+  const userId = localStorage.getItem("user_id");
+
   useEffect(() => {
     if (locate.state) {
       setTimerLength(locate.state['timerLength']);
@@ -97,10 +97,10 @@ function Mission() {
 
   return (
     <div className="mission-container">
-      <div className="mission-header">
+      <header className="mission-header">
         <Header text='쉬어가기 미션' />
-      </div>
-      <div className="mission-content">
+      </header>
+      <section className="mission-content">
         {!showResult && (
           <>
             <p style={{fontWeight:'bold'}}>문제를 맞히면<br />당근을 받을 수 있어요!</p>
@@ -116,9 +116,7 @@ function Mission() {
             </div>
             <button onClick={async () => {
               setShowResult(true);
-              if (Number(userAnswer) === missionData.answer) {
-                backendAPI.postRestSuccess(userId, undefined);                
-              }
+              if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId, undefined);
             }}>확인하기</button>
           </>
         )}
@@ -137,7 +135,7 @@ function Mission() {
               },
             })}>다음</button>
           </>
-          :
+        :
           <>
             <p className="comment" style={{fontWeight:'bold'}}>아쉬워요! 😢</p>
             <img src={rabbit_worriedImg} height={235}/>
@@ -150,7 +148,7 @@ function Mission() {
             }}>다시 풀기</button>
           </>
         )}
-      </div>
+      </section>
     </div>
   )
 }
