@@ -308,7 +308,6 @@ body {
 .reward-bottom-nav {
   width: 357px;
   height: 60px;
-  margin: 20px auto 30px;
   position: fixed;
 
   left: 50%;
@@ -324,7 +323,7 @@ body {
   align-items: center;
 
   gap: 0.6px;
-  z-index: 100;
+  z-index: 999;
 }
 
 .reward-nav-item {
