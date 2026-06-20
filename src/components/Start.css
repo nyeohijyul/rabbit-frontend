@@ -21,11 +21,24 @@ body {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
   }
 }
+@keyframes click {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+}
 label:has(input:checked) {
   filter: brightness(0.95);
+  animation: click 0.2s 1;
 }
 .checked {
   filter: brightness(0.95);
+  box-shadow: inset 0 0 4px 0 rgba(0,0,0,0.11) !important;
+}
+.start-timer-button:active, .start-timer-button:active {
+  animation: click 0.2s 1;
 }
 .semibold {
   font-weight: 600;
@@ -83,7 +96,7 @@ label:has(input:checked) {
     flex-direction: column;
     align-items: center;
     padding: 8px 12px;
-    border: 1px solid #ccc;
+    box-shadow: 0 3px 4px 0 rgba(0,0,0,0.18);
     background-color: #FDFDFE;
     border-radius: 12px;
     * {
@@ -91,6 +104,9 @@ label:has(input:checked) {
     }
     p {
       font-size: 14px;
+    }
+    &:has(input:checked), &:hover {
+      box-shadow: inset 0 3px 4px 0 rgba(0,0,0,0.18);
     }
   }
 }
@@ -101,13 +117,17 @@ label:has(input:checked) {
   & > button {
     flex-grow: 1;
     background-color: #FDFDFE;
-    border: 1px solid #ccc;
+    border: 0;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.11);
     border-radius: 5px;
     padding: 10px 14px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+    &:hover {
+      box-shadow: inset 0 0 4px 0 rgba(0,0,0,0.18);
+    }
   }
 }
 
@@ -124,7 +144,7 @@ label:has(input:checked) {
   left: 0;
   right: 0;
   border-radius: 12px 12px 0 0;
-  background-color: #FFE7DA;
+  background-color: #FEF7F3;
 }
 .timer-input-modal-wrapper {
   padding: 14px;
@@ -144,6 +164,9 @@ label:has(input:checked) {
     font-size: 18px;
     height: 21px;
     line-height: 21px;
+  }
+  &:hover {
+    filter: brightness(1) !important;
   }
 }
 .time-picker-container {
@@ -198,7 +221,6 @@ label:has(input:checked) {
   position: absolute;
   z-index: 1;
   top: 109px;
-  /* bottom: 91px; */
   left: 14px;
   right: 14px;
   height: 25px;
@@ -208,8 +230,9 @@ label:has(input:checked) {
 .start-timer-button {
   position: relative;
   overflow: hidden;
+  transition: transform 0.2s;
   &:hover {
-    filter: brightness(0.9);
+    transform: scale(1.01);
   }
 }
 .start-timer-button > button {

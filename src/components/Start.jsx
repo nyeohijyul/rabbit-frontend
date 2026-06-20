@@ -33,7 +33,7 @@ const backendAPI = {
   }
 }
 
-function ContentInputs({ content, selectedContentType, setSelectedContentType }) {
+function ContentInputs({ contents, selectedContentType, setSelectedContentType }) {
   return (
     <>
       <p
@@ -41,7 +41,7 @@ function ContentInputs({ content, selectedContentType, setSelectedContentType })
         onClick={() => {setSelectedContentType('')}}
       >콘텐츠 선택</p>
       <div className="start-content-input">
-        {content.map((content, i) => (
+        {contents.map((content, i) => (
           <label className="content-type-option" key={i}>
             <input
               type="radio"
@@ -206,7 +206,7 @@ function TimerInputs({ timerLength, setTimerLength }) {
         {!isEditing ? (
           <button
             className={selected === 'custom' ? "checked" : null}
-            onClick={() => {setIsEditing(true); setSelected('custom');}}
+            onClick={() => {setSelected('custom'); setIsEditing(true);}}
           >직접 설정</button>
         ) : (
           <div
@@ -258,7 +258,7 @@ function Start() {
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("user_id");
-  const content = [
+  const contents = [
     {type: "릴스", img: reelsImg},
     {type: "유튜브", img: youtubeImg},
     {type: "웹툰", img: webtoonImg},
@@ -300,38 +300,44 @@ function Start() {
 
   return (
     <>
-    <div className="start-container">
-      <header className="start-header">
-        <img src={rabbitImg} height={227} alt="모모" />
-        <div className='description'>
-          <p className='semibold'>어떤 콘텐츠를<br />이용할까요?</p>
-          <p>집중할 콘텐츠를 선택하면<br />모모가 휴식 타이밍을 알려줄게요!</p>
-        </div>
-      </header>
-      <section className="start-content">
-        <form className={alertAnimation[0] ? "start-form vibration" : "start-form"}>
-          <ContentInputs
-            content={content}
-            selectedContentType={selectedContentType}
-            setSelectedContentType={setSelectedContentType}
-          />
-        </form>
-        <form className={alertAnimation[1] ? "start-form vibration" : "start-form"}>
-          <TimerInputs
-            timerLength={timerlength}
-            setTimerLength={setTimerLength}
-          />
-        </form>
-        <div className="start-timer-button">
-          <ImgButton
-            src={rabbit_healthyImg}
-            svgsrc={startSvg}
-            text='시작하기'
-            onClick={() => startTimer()}
-          />
-        </div>
-      </section>
-    </div>
+      <div className="start-container">
+        <header className="start-header">
+          <img src={rabbitImg} height={227} alt="모모" />
+          <div className='description'>
+            <p className='semibold'>어떤 콘텐츠를<br />이용할까요?</p>
+            <p>집중할 콘텐츠를 선택하면<br />모모가 휴식 타이밍을 알려줄게요!</p>
+          </div>
+        </header>
+        <section className="start-content">
+          <form
+            className={alertAnimation[0] ? "start-form vibration" : "start-form"}
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <ContentInputs
+              contents={contents}
+              selectedContentType={selectedContentType}
+              setSelectedContentType={setSelectedContentType}
+            />
+          </form>
+          <form
+            className={alertAnimation[1] ? "start-form vibration" : "start-form"}
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <TimerInputs
+              timerLength={timerlength}
+              setTimerLength={setTimerLength}
+            />
+          </form>
+          <div className="start-timer-button">
+            <ImgButton
+              src={rabbit_healthyImg}
+              svgsrc={startSvg}
+              text='시작하기'
+              onClick={() => startTimer()}
+            />
+          </div>
+        </section>
+      </div>
     </>
   )
 }

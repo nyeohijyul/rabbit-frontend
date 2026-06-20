@@ -95,61 +95,66 @@ function Mission() {
     document.head.appendChild(link);
   }, []);
 
+  const checkAnswer = async () => {
+    setShowResult(true);
+    if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId, undefined);
+  }
+
   return (
-    <div className="mission-container">
-      <header className="mission-header">
-        <Header text='쉬어가기 미션' />
-      </header>
-      <section className="mission-content">
-        {!showResult && (
-          <>
-            <p style={{fontWeight:'bold'}}>문제를 맞히면<br />당근을 받을 수 있어요!</p>
-            <div className="mission-card">
-              <p className='semibold'>MISSION</p>
-              <p className='semibold'>{missionData?.question}</p>
-              <input
-                type="text"
-                placeholder="답을 입력해주세요"
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
-              />
-            </div>
-            <button onClick={async () => {
-              setShowResult(true);
-              if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId, undefined);
-            }}>확인하기</button>
-          </>
-        )}
-        {showResult && (Number(userAnswer) === missionData.answer ?
-          <>
-            <p className="comment" style={{fontWeight:'bold'}}>정답이에요!</p>
-            <img src={rabbit_healthyImg} height={235}/>
-            <div className="comments">
-              <p className='semibold'>당근을 획득했어요!</p>
-              <p>이번 휴식도 성공이에요!</p>
-            </div>
-            <button onClick={() => navigate('/success', {
-              state: {
-                timerLength: timerLength,
-                contentType: contentType
-              },
-            })}>다음</button>
-          </>
-        :
-          <>
-            <p className="comment" style={{fontWeight:'bold'}}>아쉬워요! 😢</p>
-            <img src={rabbit_worriedImg} height={235}/>
-            <div className="comments">
-              <p>한 번 더 도전해볼까요?</p>
-            </div>
-            <button onClick={() => {
-              setShowResult(false);
-              setUserAnswer('');
-            }}>다시 풀기</button>
-          </>
-        )}
-      </section>
-    </div>
+    <>
+      <div className="mission-container">
+        <header className="mission-header">
+          <Header text='쉬어가기 미션' />
+        </header>
+        <section className="mission-content">
+          {!showResult && (
+            <>
+              <p style={{fontWeight:'bold'}}>문제를 맞히면<br />당근을 받을 수 있어요!</p>
+              <div className="mission-card">
+                <p className='semibold'>MISSION</p>
+                <p className='semibold'>{missionData?.question}</p>
+                <input
+                  type="text"
+                  placeholder="답을 입력해주세요"
+                  value={userAnswer}
+                  onChange={(e) => setUserAnswer(e.target.value)}
+                  onKeyDown={(e) => {if (e.key == "Enter") checkAnswer()}}
+                />
+              </div>
+              <button onClick={checkAnswer}>확인하기</button>
+            </>
+          )}
+          {showResult && (Number(userAnswer) === missionData.answer ?
+            <>
+              <p className="comment" style={{fontWeight:'bold'}}>정답이에요!</p>
+              <img src={rabbit_healthyImg} height={235}/>
+              <div className="comments">
+                <p className='semibold'>당근을 획득했어요!</p>
+                <p>이번 휴식도 성공이에요!</p>
+              </div>
+              <button onClick={() => navigate('/success', {
+                state: {
+                  timerLength: timerLength,
+                  contentType: contentType
+                },
+              })}>다음</button>
+            </>
+          :
+            <>
+              <p className="comment" style={{fontWeight:'bold'}}>아쉬워요! 😢</p>
+              <img src={rabbit_worriedImg} height={235}/>
+              <div className="comments">
+                <p>한 번 더 도전해볼까요?</p>
+              </div>
+              <button onClick={() => {
+                setShowResult(false);
+                setUserAnswer('');
+              }}>다시 풀기</button>
+            </>
+          )}
+        </section>
+      </div>
+    </>
   )
 }
 

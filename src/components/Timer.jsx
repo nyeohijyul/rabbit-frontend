@@ -271,7 +271,6 @@ function ComputedTime({ sec }) {
   const h = Math.floor(sec / 3600);
   const m = Math.floor((sec - h*3600) / 60);
   const s = Math.floor(sec % 60);
-  console.log(h, m, s)
   return (
     <p>
       {!!h && <><span>{String(h).padStart(2, "0")}</span>시간 </>}
@@ -426,52 +425,54 @@ function TimerPopup({ contentType, timerLength, setShowPopup, setIsAutostart }) 
   const navigate = useNavigate();
 
   return (
-    <div className='timer-popup-container'>
-      <section className='timer-popup'>
-        <div className='timer-popup-wrapper'>
-          <img src={timerSvg} width={31} height={38} />
-          <p className='semibold'>{computeTime(timerLength) + contentDescription[contentType]}</p>
-          <p style={{fontWeight:'bold'}}>잠시 쉬어가는 건 어떨까요?</p>
-          <img src={rabbit_restingImg} height={241}/>
-          <section className='timer-info'>
-            <section>
-              <p>설정한 휴식 시간</p>
-              <ComputedTime sec={timerLength} />
+    <>
+      <div className='timer-popup-container'>
+        <section className='timer-popup'>
+          <div className='timer-popup-wrapper'>
+            <img src={timerSvg} width={31} height={38} />
+            <p className='semibold'>{computeTime(timerLength) + contentDescription[contentType]}</p>
+            <p style={{fontWeight:'bold'}}>잠시 쉬어가는 건 어떨까요?</p>
+            <img src={rabbit_restingImg} height={241}/>
+            <section className='timer-info'>
+              <section>
+                <p>설정한 휴식 시간</p>
+                <ComputedTime sec={timerLength} />
+              </section>
+              <img src={carrotImg} width={85}/>
+              <section>
+                <p>미션 시 획득 당근</p>
+                <p><span>+1</span>개</p>
+              </section>
             </section>
-            <img src={carrotImg} width={85}/>
-            <section>
-              <p>미션 시 획득 당근</p>
-              <p><span>+1</span>개</p>
-            </section>
-          </section>
-          <div className='timer-popup-button orangebtn'>
-            <ImgButton
-              src={rabbit_cheeringImg}
-              text='쉬어가기 (미션 수행)'
-              onClick={() => {
-                navigate('/mission', {
-                  state: {
-                    timerLength: timerLength,
-                    contentType: contentType
-                  }
-                })
-              }}
-            />
+            <div className='timer-popup-button orangebtn'>
+              <ImgButton
+                src={rabbit_cheeringImg}
+                text='쉬어가기 (미션 수행)'
+                onClick={() => {
+                  navigate('/mission', {
+                    state: {
+                      timerLength: timerLength,
+                      contentType: contentType
+                    }
+                  })
+                }}
+              />
+            </div>
+            <div className='timer-popup-button whitebtn'>
+              <ImgButton
+                src={rabbit_worriedImg}
+                text='나중에 할게요'
+                onClick={()=>{
+                  backendAPI.postRestSkip(userId);
+                  setIsAutostart(true);
+                  setShowPopup(false)
+                }}
+              />
+            </div>
           </div>
-          <div className='timer-popup-button whitebtn'>
-            <ImgButton
-              src={rabbit_worriedImg}
-              text='나중에 할게요'
-              onClick={()=>{
-                backendAPI.postRestSkip(userId);
-                setIsAutostart(true);
-                setShowPopup(false)
-              }}
-            />
-          </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   )
 }
 
@@ -528,7 +529,10 @@ function Timer({ timer_id, started_at=Date.now() }) {
           />
         </section>
         {!isRunning && showSetting &&
-          <form className="timer-form">
+          <form
+            className="timer-form"
+            onSubmit={(e) => e.preventDefault()}
+          >
             <p className='semibold'>시간 설정</p>
             <div className="timer-input">
               <TimerInputButtons
