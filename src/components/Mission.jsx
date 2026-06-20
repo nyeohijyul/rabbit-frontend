@@ -12,7 +12,7 @@ const BASE_URL = "http://15.164.93.68:8080";
 const url = `${BASE_URL}/rest/success`;
 
 const backendAPI = {
-  postRestSuccess: async (user_id=1, timer_id=5, is_correct=true) => {
+  postRestSuccess: async (user_id=1, timer_id=1, is_correct=true) => {
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -63,6 +63,8 @@ function randomMission() {
 }
 
 function Mission() {
+  const userId = localStorage.getItem("user_id");
+
   const [selectedMission, setSelectedMission] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
   const [missionData, setMissionData] = useState(null);
@@ -96,7 +98,7 @@ function Mission() {
   return (
     <div className="mission-container">
       <div className="mission-header">
-        <Header text={'쉬어가기 미션'} />
+        <Header text='쉬어가기 미션' />
       </div>
       <div className="mission-content">
         {!showResult && (
@@ -115,7 +117,7 @@ function Mission() {
             <button onClick={async () => {
               setShowResult(true);
               if (Number(userAnswer) === missionData.answer) {
-                backendAPI.postRestSuccess(undefined, undefined);                
+                backendAPI.postRestSuccess(userId, undefined);                
               }
             }}>확인하기</button>
           </>
