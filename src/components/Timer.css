@@ -12,8 +12,14 @@ body {
   text-align: start;
 }
 .timer-container {
-  margin: 50px 18px 0; /* 나중에 0 18px 로 변경 */
+  padding: 18px;
 
+  overflow-y: auto;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+  &::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  }
   button:hover, button:active {
     filter: brightness(0.9);
   }
@@ -140,8 +146,9 @@ body {
 }
 .timer-input {
   display: flex;
-  justify-content: space-between;
+  gap: 23px;
   & > button {
+    flex-grow: 1;
     background-color: #FDFDFE;
     border: 1px solid #ccc;
     border-radius: 5px;

@@ -22,7 +22,7 @@ const url = `${BASE_URL}/rest/skip`;
 
 const backendAPI = {
   postRestSkip: async (uid=1) => {
-    const response = await fetch(`${url}?uid=${uid}`, {
+    const response = await fetch(`${url}?userId=${uid}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
@@ -353,13 +353,23 @@ function ImgButton({ src, text, onClick }) {
 }
 
 function TimerPopup({ contentType, timerLength, setShowPopup, setIsAutostart }) {
+  const userId = localStorage.getItem("user_id");
+  const contentDescription = {
+    릴스: "릴스를 보고있어요",
+    유튜브: "유튜브를 보고있어요",
+    웹툰: "웹툰을 보고있어요",
+    게임: "게임을 하고있어요",
+    기타: "기타 콘텐츠를 하고있어요",
+  }
+
   const navigate = useNavigate();
+
   return (
     <div className='timer-popup-container'>
       <div className='timer-popup'>
         <div className='timer-popup-wrapper'>
           <img src={timerSvg} width={31} height={38}/>
-          <p className='semibold'>{computeTime(timerLength)}째 {contentType}를 보고있어요</p>
+          <p className='semibold'>{computeTime(timerLength)}째 {contentDescription[contentType]}</p>
           <p style={{fontWeight:'bold'}}>잠시 쉬어가는 건 어떨까요?</p>
           <img src={rabbit_restingImg} height={241}/>
           <div className='timer-info'>
@@ -392,7 +402,7 @@ function TimerPopup({ contentType, timerLength, setShowPopup, setIsAutostart }) 
               src={rabbit_worriedImg}
               text='나중에 할게요'
               onClick={()=>{
-                backendAPI.postRestSkip();
+                backendAPI.postRestSkip(userId);
                 setIsAutostart(true);
                 setShowPopup(false)
               }}
@@ -455,7 +465,8 @@ function Timer({ timer_id, started_at=Date.now() }) {
           <img src={carrotImg} width={85} />
           <div className="timer-rest">
             <p>지금까지 휴식 시간</p>
-            <p><span>40</span>분 <span>12</span>초</p>
+            {/* <p><span>40</span>분 <span>12</span>초</p> */}
+            <p><span>추후 제공</span></p>
           </div>
           <div className="earned-carrots">
             <p>오늘 성공</p>
