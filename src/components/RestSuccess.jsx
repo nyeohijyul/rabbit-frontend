@@ -104,15 +104,15 @@ function RestSuccess() {
   }, []);
   return (
     <>
-    <div className="success-container">
-      <div className="success-header">
+    <div className="rest-success-container">
+      <div className="rest-success-header">
         <Header text="휴식 완료" />
       </div>
-      <div className="success-content">
+      <div className="rest-success-content">
         <p style={{fontWeight:"bold"}}>모모가 당근을 먹고<br />힘을 냈어요!</p>
         <p className='medium'>휴식을 성공할수록 더 많은 당근을 모을 수 있어요!</p>
         <img src={rabbit_eatcarrotImg} height={233}/>
-        <div className="success-card">
+        <div className="rest-success-card">
           <div className="content-info">
             <img src={imgSrc} width={56}/>
             <div className="content-type">
@@ -135,12 +135,12 @@ function RestSuccess() {
               <p><span>+1</span>개</p>
             </div>
           </div>
-          <div className="success-comments">
+          <div className="rest-success-comments">
             <p className='medium'>정말 잘 쉬었어요!</p>
             <p>이대로 꾸준히 휴식을 지켜봐요!</p>
           </div>
         </div>
-        <div className="success-buttons">
+        <div className="rest-success-buttons">
           <SvgButton svgsrc={homeSvg} img={{w: 17, h: 18}} text={'홈으로 이동'} onClick={() => navigate('/home')} />
           <SvgButton svgsrc={restSvg} img={{w: 18, h: 18}} text={'다시 휴식하기'} onClick={() => navigate('/start')} />
         </div>
