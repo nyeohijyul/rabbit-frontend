@@ -20,11 +20,12 @@ body {
 
 .home {
   width: 393px;
-  height: 852px;
+  min-height: 100dvh;
+  overflow-y: auto;
+  padding-bottom: 120px;
   margin: 0 auto;
   background: #f8f3f0;
   position: relative;
-  overflow: hidden;
   padding: 0;
 }
 
