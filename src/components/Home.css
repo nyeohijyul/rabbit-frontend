@@ -28,7 +28,7 @@ body {
   position: relative;
   overflow-x: hidden;
 
-  padding-bottom: 140px;
+  padding-bottom: 110px;
   
 }
 
@@ -407,7 +407,10 @@ body {
   width: 357px;
   height: 60px;
 
-  margin: 14px auto 0;
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
 
   background: white;
   border-radius: 27px;
@@ -418,6 +421,7 @@ body {
   align-items: center;
 
   gap:0.6px;
+  z-index: 999;
 }
 
 .nav-item {
