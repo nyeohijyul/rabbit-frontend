@@ -497,7 +497,7 @@ function Timer({ timer_id, started_at=Date.now() }) {
     } else {
       navigate('/start')
     }
-    setSuccessCount(backendAPI.getUserSuccessCount(userId ?? 1));
+    // setSuccessCount(backendAPI.getUserSuccessCount(userId ?? 1));
   }, [])
 
   useEffect(() => {
