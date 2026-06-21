@@ -184,7 +184,10 @@ function TimerInputs({ timerLength, setTimerLength }) {
     <>
       <p
         className='semibold'
-        onClick={() => {setTimerLength(0)}}
+        onClick={() => {
+          setTimerLength(0);
+          setSelected(null);
+        }}
       >휴식 주기 선택</p>
       <div className="start-timer-input">
         {[10,15,20,30].map((min, i) => (
@@ -272,18 +275,19 @@ function Start() {
     게임: "GAME",
     기타: "ETC",
   }
-  useEffect(() => {
-    if (!userId) navigate('/');
-  }, [])
+  // useEffect(() => {
+  //   if (!userId) navigate('/');
+  // }, [])
 
   async function startTimer () {
     if (selectedContentType && timerlength) {
-      const data = await backendAPI.postTimerStart(userId, contentTag[selectedContentType], timerlength);
+      let data;
+      if (userId) data = await backendAPI.postTimerStart(userId, contentTag[selectedContentType], timerlength); else console.log('userId가 없습니다.');
       navigate("/timer", {
         state: {
           timerLength: timerlength,
           contentType: selectedContentType,
-          timerId: data.id
+          timerId: data?.id
         }
       })
     } else {

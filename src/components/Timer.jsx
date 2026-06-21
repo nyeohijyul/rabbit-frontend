@@ -65,7 +65,7 @@ function SvgButton({ svgsrc, text, onClick, img }) {
   )
 }
 
-function TimerChart({ timerLength = 600, onClick, isRunning, setIsRunning, setShowPopup, restartCount }) {
+function TimerChart({ timerLength = 600, onClick, isRunning, setIsRunning, setShowPopup, restartCount, setShowSetting }) {
   const size = 265;
   const stroke = 19.5;
   const radius = (size - stroke) / 2;
@@ -77,7 +77,7 @@ function TimerChart({ timerLength = 600, onClick, isRunning, setIsRunning, setSh
   const endTimeRef = useRef(null);
 
   useEffect(() => {      
-    setTimeLeft(timerLength)
+    setTimeLeft(timerLength);
   }, [timerLength])
 
   useEffect(() => {
@@ -85,6 +85,7 @@ function TimerChart({ timerLength = 600, onClick, isRunning, setIsRunning, setSh
 
     setTimeLeft(timerLength);
     start(timerLength);
+    setShowSetting(true);
   }, [restartCount]);
 
   // 시작 / 재시작
@@ -106,6 +107,7 @@ function TimerChart({ timerLength = 600, onClick, isRunning, setIsRunning, setSh
         clearInterval(intervalRef.current);
         setIsRunning(false);
         setShowPopup(true);
+        setShowSetting(false);
       }
     }, 200);
   };
@@ -388,7 +390,7 @@ function CustomTimeInputModal({ timerLength, setTimerLength, setIsEditing }) {
             onClick={() => {
               let selectedSecond = selectedTime.h * 3600 + selectedTime.m * 60 + selectedTime.s;
               if (selectedSecond) setTimerLength(selectedSecond);
-              setIsEditing(false)
+              setIsEditing(false);
             }}
           >
             <p className='medium'>설정완료</p>
@@ -470,7 +472,7 @@ function TimerPopup({ contentType, timerLength, timerId, setShowPopup, setIsAuto
                 src={rabbit_worriedImg}
                 text='나중에 할게요'
                 onClick={()=>{
-                  backendAPI.postRestSkip(userId);
+                  if (userId) backendAPI.postRestSkip(userId); else console.log('userId가 없습니다.');
                   setRestartCount(prev => prev + 1);
                   setShowPopup(false);
                 }}
@@ -501,15 +503,15 @@ function Timer() {
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    if (!userId) navigate('/');
+    // if (!userId) navigate('/');
     if (locate.state) {
       setTimerLength(locate.state['timerLength']);
       setContentType(locate.state['contentType']);
-      setTimerId(locate.state['timerId']);
+      if (userId) setTimerId(locate.state['timerId']);
     } else {
       navigate('/start')
     }
-    setSuccessCount(backendAPI.getUserSuccessCount(userId));
+    if (userId) setSuccessCount(backendAPI.getUserSuccessCount(userId));
   }, [])
   
   return (
@@ -530,6 +532,7 @@ function Timer() {
             setShowPopup={setShowPopup}
             autostart={isAutostart}
             restartCount={restartCount}
+            setShowSetting={setShowSetting}
           />
         </section>
         {!isRunning && showSetting &&

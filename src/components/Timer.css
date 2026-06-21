@@ -1,14 +1,5 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
-
-body {
-  background-color: #FEF7F3;
-}
 * {
-  margin: 0;
-  padding: 0;
-  font-family: 'Pretendard', sans-serif;
   letter-spacing: 0;
-  box-sizing: border-box;
   color: #1f1f1f;
   line-height: normal;
   text-align: start;
@@ -354,13 +345,14 @@ body {
   right: 8px;
   left: 8px;
   background: #FDF5EB;
-  padding: 18px;
+  padding: 60px 18px;
   border-radius: 12px;
-  /* min-width: 300px; */
-  width: calc(100dvw - 16px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  overflow-y: auto;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+  &::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  }
 }
 .timer-popup-wrapper {
   text-align: center;
