@@ -17,12 +17,17 @@ export default function Onboarding() {
   const isValid = name.trim().length > 0;
 
   const handleNext = async () => {
-    if (!isValid || loading) return;
+    if (!isValid || loading) 
+      return;
+    
+  
+
 
     try {
       setLoading(true);
 
       const result = await onboardingUser(name);
+      console.log("온보딩:", result);
 
       localStorage.setItem(
         "user_id",
