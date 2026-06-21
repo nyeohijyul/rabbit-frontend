@@ -20,11 +20,12 @@ body {
 
 .stat {
   width: 393px;
-  height: 852px;
+  min-height: 100dvh;
   margin: 0 auto;
   position: relative;
   background: #f8f3f0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding-bottom: 110px;
 }
 

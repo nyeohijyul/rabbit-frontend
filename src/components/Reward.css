@@ -20,12 +20,15 @@ body {
 
 .reward {
   width: 393px;
-  height: 852px;
+  height: 100dvh;
   margin: 0 auto;
   background: #f8f3f0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 110px;
   position: relative;
-  overflow: hidden;
 }
+
 
 /* 헤더 */
 
@@ -228,6 +231,8 @@ body {
   font-size: 11.5px;
   line-height: 19px;
   color: #999;
+
+  text-align: center;
 }
 
 .bg-item.owned p,
@@ -303,10 +308,11 @@ body {
 .reward-bottom-nav {
   width: 357px;
   height: 60px;
+  position: fixed;
 
-  position: absolute;
-  left: 18px;
+  left: 50%;
   bottom: 26px;
+  transform: translateX(-50%);
 
   background: white;
   border-radius: 27px;
@@ -317,6 +323,7 @@ body {
   align-items: center;
 
   gap: 0.6px;
+  z-index: 999;
 }
 
 .reward-nav-item {

@@ -20,12 +20,16 @@ body {
 
 .home {
   width: 393px;
-  height: 852px;
+  min-height: 100dvh;
+  overflow-y: auto;
+  padding-bottom: 170px;
   margin: 0 auto;
   background: #f8f3f0;
   position: relative;
-  overflow: hidden;
-  padding: 0;
+  overflow-x: hidden;
+
+  padding-bottom: 110px;
+  
 }
 
 /* 상단 */
@@ -403,9 +407,10 @@ body {
   width: 357px;
   height: 60px;
 
-  position: absolute;
-  left:18px;
+  position: fixed;
+  left: 50%;
   bottom: 26px;
+  transform: translateX(-50%);
 
   background: white;
   border-radius: 27px;
@@ -416,6 +421,7 @@ body {
   align-items: center;
 
   gap:0.6px;
+  z-index: 999;
 }
 
 .nav-item {
