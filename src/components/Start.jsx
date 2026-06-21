@@ -23,7 +23,7 @@ const backendAPI = {
       body: JSON.stringify({ 
         userId,
         contentType,
-        focusMinutes: timerLength,
+        focusMinutes: timerLength / 60,
         restMinutes: 0
       }),
     });
@@ -272,22 +272,18 @@ function Start() {
     게임: "GAME",
     기타: "ETC",
   }
-
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css";
-    document.head.appendChild(link);
-  }, []);
+    if (!userId) navigate('/');
+  }, [])
 
-  function startTimer () {
+  async function startTimer () {
     if (selectedContentType && timerlength) {
-      backendAPI.postTimerStart(userId ?? 1, contentTag[selectedContentType], timerlength);
+      const data = await backendAPI.postTimerStart(userId, contentTag[selectedContentType], timerlength);
       navigate("/timer", {
         state: {
           timerLength: timerlength,
-          contentType: selectedContentType
+          contentType: selectedContentType,
+          timerId: data.id
         }
       })
     } else {

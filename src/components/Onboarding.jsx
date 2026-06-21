@@ -23,11 +23,10 @@ export default function Onboarding() {
       setLoading(true);
 
       const result = await onboardingUser(name);
-      console.log("온보딩 response:", result);
 
       localStorage.setItem(
         "user_id",
-        result.user_id ?? result.id
+        result.id ?? result.user_id
       );
       localStorage.setItem(
         "username",

@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
 body {
   background-color: #FEF7F3;
 }
@@ -21,7 +23,7 @@ body {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
   }
 }
-@keyframes click {
+/* @keyframes click {
   0% {
     transform: scale(1);
   }
@@ -31,7 +33,7 @@ body {
   100% {
     transform: scale(1);
   }
-}
+} */
 .semibold {
   font-weight: 600;
 }
@@ -77,12 +79,12 @@ body {
     text-align: center;
     line-height: 60px;
     transition: transform 0.2s;
-    &:hover {
+    /* &:hover {
       transform: scale(1.01);
-    }
-    &:active {
+    } */
+    /* &:active {
       animation: click 0.2s 1;
-    }
+    } */
   }
 }
 .mission-card {
@@ -126,7 +128,7 @@ body {
     font-weight: 500;
     transition: transform 0.2s;
     &:focus {
-      transform: scale(1.01);
+      /* transform: scale(1.01); */
       outline: 1px solid #FFE7D6;
     }
     &::placeholder {
