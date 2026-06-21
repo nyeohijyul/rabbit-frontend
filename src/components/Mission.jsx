@@ -10,7 +10,10 @@ import backSvg from '../assets/back.svg'
 const BASE_URL = "http://15.164.93.68:8080";
 
 const backendAPI = {
-  postRestSuccess: async (user_id=1, timer_id=1, is_correct=true) => {
+  postRestSuccess: async (user_id, timer_id, is_correct=true) => {
+    console.log({
+        user_id, timer_id, is_correct
+      })
     const response = await fetch(`${BASE_URL}/rest/success`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -61,13 +64,15 @@ function randomMission() {
 }
 
 function Mission() {
+  const [contentType, setContentType] = useState('');
+  const [timerLength, setTimerLength] = useState(600);
+  const [timerId, setTimerId] = useState('');
+
   const [selectedMission, setSelectedMission] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
   const [missionData, setMissionData] = useState(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [showResult, setShowResult] = useState(false);
-  const [contentType, setContentType] = useState('');
-  const [timerLength, setTimerLength] = useState(600);
   
   const navigate = useNavigate();
   const locate = useLocation();
@@ -75,17 +80,16 @@ function Mission() {
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
+    if (!userId) navigate('/');
     if (locate.state) {
       setTimerLength(locate.state['timerLength']);
       setContentType(locate.state['contentType']);
+      setTimerId(locate.state['timerId']);
     } else {
       navigate('/start')
     }
-  }, [])
-
-  useEffect(() => {
     setMissionData(randomMission());
-  }, []);
+  }, [])
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -97,7 +101,7 @@ function Mission() {
 
   const checkAnswer = async () => {
     setShowResult(true);
-    if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId ?? 1, undefined);
+    if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId, timerId);
   }
 
   return (

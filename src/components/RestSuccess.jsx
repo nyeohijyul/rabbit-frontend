@@ -107,10 +107,13 @@ function Modal({ contentType, setContentType, setIsChanging }) {
 function RestSuccess() {
   const [contentType, setContentType] = useState('');
   const [timerLength, setTimerLength] = useState(600);
+
   const [isChanging, setIsChanging] = useState(false);
 
   const navigate = useNavigate();
   const locate = useLocation();
+  
+  const userId = localStorage.getItem("user_id");
 
   const contentSrc = {
     릴스 : reelsImg,
@@ -122,6 +125,7 @@ function RestSuccess() {
   const imgSrc = contentSrc[contentType];
   
   useEffect(() => {
+    if (!userId) navigate('/');
     if (locate.state) {
       setTimerLength(locate.state['timerLength']);
       setContentType(locate.state['contentType']);

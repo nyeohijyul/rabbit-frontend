@@ -120,7 +120,8 @@ label:has(input:checked) {
     border: 0;
     box-shadow: 0 0 4px 0 rgba(0,0,0,0.11);
     border-radius: 5px;
-    padding: 10px 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
