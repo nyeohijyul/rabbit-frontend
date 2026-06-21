@@ -49,7 +49,6 @@ function ComputedTime({ sec }) {
   const h = Math.floor(sec / 3600);
   const m = Math.floor((sec - h*3600) / 60);
   const s = Math.floor(sec % 60);
-  console.log(h, m, s)
   return (
     <p>
       {!!h && <><span>{String(h).padStart(2, "0")}</span>시간 </>}
@@ -78,7 +77,7 @@ function RestSuccess() {
   const imgSrc = contentSrc[contentType];
   
   useEffect(() => {
-    if (!userId) navigate('/');
+    // if (!userId) navigate('/');
     if (locate.state) {
       setTimerLength(locate.state['timerLength']);
       setContentType(locate.state['contentType']);

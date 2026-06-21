@@ -80,11 +80,11 @@ function Mission() {
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    if (!userId) navigate('/');
+    // if (!userId) navigate('/');
     if (locate.state) {
       setTimerLength(locate.state['timerLength']);
       setContentType(locate.state['contentType']);
-      setTimerId(locate.state['timerId']);
+      if (userId) setTimerId(locate.state['timerId']);
     } else {
       navigate('/start')
     }
@@ -93,7 +93,9 @@ function Mission() {
 
   const checkAnswer = async () => {
     setShowResult(true);
-    if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId, timerId);
+    if (Number(userAnswer) === missionData.answer) {
+      if (userId) backendAPI.postRestSuccess(userId, timerId); else console.log('userId가 없습니다.')
+    };
   }
 
   return (
