@@ -84,3 +84,54 @@ export const getUserRewards = async (userId) => {
 
   return data;
 };
+
+/* =========================
+   타이머 시작 화면
+========================= */
+export const postTimerStart = async (userId, contentType, timerLength) => {
+  const response = await fetch(`${API_URL}/timer/start`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ 
+      userId,
+      contentType,
+      focusMinutes: timerLength / 60,
+      restMinutes: 0
+    }),
+  });
+  const data = await response.json();
+  console.log(data);
+  return data;
+};
+
+/* =========================
+   타이머 화면 - 미션 스킵 시
+========================= */
+export const postRestSkip = async (userId) => {
+  const response = await fetch(`${API_URL}/rest/skip?userId=${userId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await response.json();
+  console.log(data)
+  return data;
+};
+
+/* =========================
+   미션 화면 - 미션 성공 시
+========================= */
+export const postRestSuccess = async (user_id, timer_id, is_correct=true) => {
+  console.log({
+      user_id, timer_id, is_correct
+    })
+  const response = await fetch(`${API_URL}/rest/success`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id, timer_id, is_correct
+    }),
+  });
+  const data = await response.json();
+  console.log(data);
+  return data;
+};
