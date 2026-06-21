@@ -276,14 +276,6 @@ function Start() {
     if (!userId) navigate('/');
   }, [])
 
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css";
-    document.head.appendChild(link);
-  }, []);
-
   async function startTimer () {
     if (selectedContentType && timerlength) {
       const data = await backendAPI.postTimerStart(userId, contentTag[selectedContentType], timerlength);

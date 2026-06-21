@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
 body {
   background-color: #FEF7F3;
 }
@@ -21,25 +23,25 @@ body {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
   }
 }
-@keyframes click {
+/* @keyframes click {
   0% {
     transform: scale(1);
   }
   50% {
     transform: scale(0.98);
   }
-}
+} */
 label:has(input:checked) {
   filter: brightness(0.95);
-  animation: click 0.2s 1;
+  /* animation: click 0.2s 1; */
 }
 .checked {
   filter: brightness(0.95);
   box-shadow: inset 0 0 4px 0 rgba(0,0,0,0.11) !important;
 }
-.start-timer-button:active, .start-timer-button:active {
+/* .start-timer-button:active, .start-timer-button:active {
   animation: click 0.2s 1;
-}
+} */
 .semibold {
   font-weight: 600;
 }
@@ -232,9 +234,9 @@ label:has(input:checked) {
   position: relative;
   overflow: hidden;
   transition: transform 0.2s;
-  &:hover {
+  /* &:hover {
     transform: scale(1.01);
-  }
+  } */
 }
 .start-timer-button > button {
   display: flex;

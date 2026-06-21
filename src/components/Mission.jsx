@@ -91,14 +91,6 @@ function Mission() {
     setMissionData(randomMission());
   }, [])
 
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css";
-    document.head.appendChild(link);
-  }, []);
-
   const checkAnswer = async () => {
     setShowResult(true);
     if (Number(userAnswer) === missionData.answer) backendAPI.postRestSuccess(userId, timerId);
