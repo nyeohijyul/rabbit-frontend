@@ -16,26 +16,7 @@ import resetSvg from '../assets/reset.svg'
 import pauseSvg from '../assets/pause.svg'
 import timerSvg from '../assets/timer.svg'
 
-const BASE_URL = "http://15.164.93.68:8080";
-
-const backendAPI = {
-  postRestSkip: async (userId) => {
-    const response = await fetch(`${BASE_URL}/rest/skip?userId=${userId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
-    const data = await response.json();
-    console.log(data)
-    return data;
-  },
-  getUserSuccessCount: async (userId) => {
-    const response = await fetch(
-      `${BASE_URL}/users/${userId}/stats`
-    );
-    const data = await response.json();
-    return data.success_count;
-  }
-}
+import { postRestSkip, getUserStats } from '../api';
 
 function Header({ text }) {
   const navigate = useNavigate();
@@ -472,7 +453,7 @@ function TimerPopup({ contentType, timerLength, timerId, setShowPopup, setIsAuto
                 src={rabbit_worriedImg}
                 text='나중에 할게요'
                 onClick={()=>{
-                  if (userId) backendAPI.postRestSkip(userId); else console.log('userId가 없습니다.');
+                  if (userId) postRestSkip(userId); else console.log('userId가 없습니다.');
                   setRestartCount(prev => prev + 1);
                   setShowPopup(false);
                 }}
@@ -511,7 +492,14 @@ function Timer() {
     } else {
       navigate('/start')
     }
-    if (userId) setSuccessCount(backendAPI.getUserSuccessCount(userId));
+    const fetchData = async () => {
+      if (userId) {
+        const data = await getUserStats(userId);
+        console.log(data)
+        setSuccessCount(data.success_count);
+      }
+    }
+    fetchData();
   }, [])
   
   return (

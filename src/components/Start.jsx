@@ -13,25 +13,7 @@ import etcImg from '../assets/setting.png';
 import rabbit_healthyImg from '../assets/rabbit_healthy.png';
 import startSvg from '../assets/start.svg'
 
-const BASE_URL = "http://15.164.93.68:8080";
-
-const backendAPI = {
-  postTimerStart: async (userId=1, contentType, timerLength) => {
-    const response = await fetch(`${BASE_URL}/timer/start`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        userId,
-        contentType,
-        focusMinutes: timerLength / 60,
-        restMinutes: 0
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
-    return data;
-  }
-}
+import { postTimerStart } from '../api';
 
 function ContentInputs({ contents, selectedContentType, setSelectedContentType }) {
   return (
@@ -282,7 +264,7 @@ function Start() {
   async function startTimer () {
     if (selectedContentType && timerlength) {
       let data;
-      if (userId) data = await backendAPI.postTimerStart(userId, contentTag[selectedContentType], timerlength); else console.log('userId가 없습니다.');
+      if (userId) data = await postTimerStart(userId, contentTag[selectedContentType], timerlength); else console.log('userId가 없습니다.');
       navigate("/timer", {
         state: {
           timerLength: timerlength,

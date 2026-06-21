@@ -7,25 +7,7 @@ import rabbit_healthyImg from '../assets/rabbit_healthy.png';
 import rabbit_worriedImg from '../assets/worried Rabbit.png';
 import backSvg from '../assets/back.svg'
 
-const BASE_URL = "http://15.164.93.68:8080";
-
-const backendAPI = {
-  postRestSuccess: async (user_id, timer_id, is_correct=true) => {
-    console.log({
-        user_id, timer_id, is_correct
-      })
-    const response = await fetch(`${BASE_URL}/rest/success`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id, timer_id, is_correct
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
-    return data;
-  }
-}
+import { postRestSuccess } from "../api";
 
 function Header({ text }) {
   const navigate = useNavigate();
@@ -94,7 +76,7 @@ function Mission() {
   const checkAnswer = async () => {
     setShowResult(true);
     if (Number(userAnswer) === missionData.answer) {
-      if (userId) backendAPI.postRestSuccess(userId, timerId); else console.log('userId가 없습니다.')
+      if (userId) postRestSuccess(userId, timerId); else console.log('userId가 없습니다.')
     };
   }
 
