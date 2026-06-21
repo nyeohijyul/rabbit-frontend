@@ -59,60 +59,13 @@ function ComputedTime({ sec }) {
   )
 }
 
-function Modal({ contentType, setContentType, setIsChanging }) {
-  const contents = [
-    {type: "릴스", img: reelsImg},
-    {type: "유튜브", img: youtubeImg},
-    {type: "웹툰", img: webtoonImg},
-    {type: "게임", img: gameImg},
-    {type: "기타", img: etcImg}
-  ];
-  return (
-    <>
-      <div className='rest-success-modal' onClick={(e) => e.stopPropagation()}>
-        <div className='rest-success-modal-wrapper'>
-          <form
-            className="rest-success-form"
-            onSubmit={(e) => e.preventDefault()}>
-            <div className="rest-success-content-input">
-              {contents.map((content, i) => (
-                <label className="content-type-option" key={i}>
-                  <input
-                    type="radio"
-                    name="contentType"
-                    value={content.type}
-                    onChange={() => setContentType(content.type)}
-                    checked={contentType === content.type}
-                  />
-                  <img src={content.img} width={73}/>
-                  <p className='medium'>{content.type}</p>
-                </label>
-              ))}
-            </div>
-          </form>
-          <button
-            className='rest-success-modal-button'
-            onClick={() => {
-              setIsChanging(false)
-            }}
-          >
-            <p className='medium'>설정완료</p>
-          </button>
-        </div>
-      </div>
-    </>
-  )
-}
-
 function RestSuccess() {
   const [contentType, setContentType] = useState('');
   const [timerLength, setTimerLength] = useState(600);
 
-  const [isChanging, setIsChanging] = useState(false);
-
   const navigate = useNavigate();
   const locate = useLocation();
-  
+
   const userId = localStorage.getItem("user_id");
 
   const contentSrc = {
@@ -133,14 +86,6 @@ function RestSuccess() {
       navigate('/start')
     }
   }, [])
-
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css";
-    document.head.appendChild(link);
-  }, []);
   
   return (
     <>
@@ -158,12 +103,6 @@ function RestSuccess() {
               <div className="content-type">
                 <p>선택한 콘텐츠</p>
                 <p className='semibold'>{contentType}</p>
-              </div>
-              <div className="type-buttons">
-                <button
-                  className='medium'
-                  onClick={() => setIsChanging(true)}
-                >변경하기</button>
               </div>
             </section>
             <section className="rest-info">
@@ -198,14 +137,6 @@ function RestSuccess() {
           </div>
         </section>
       </div>
-      {isChanging && 
-        <div
-          className="rest-success-modal-container"
-          onClick={() => setIsChanging(false)}
-        >
-          <Modal contentType={contentType} setContentType={setContentType} setIsChanging={setIsChanging} />
-        </div>
-      }
     </>
   )
 }

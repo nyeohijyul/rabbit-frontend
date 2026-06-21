@@ -488,7 +488,7 @@ function Timer() {
   const [timerLength, setTimerLength] = useState(600);
   const [timerId, setTimerId] = useState('');
   const [successCount, setSuccessCount] = useState(0);
-  
+
   const [isRunning, setIsRunning] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -511,15 +511,6 @@ function Timer() {
     }
     setSuccessCount(backendAPI.getUserSuccessCount(userId));
   }, [])
-
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css";
-    document.head.appendChild(link);
-  }, []);
-
   
   return (
     <>
